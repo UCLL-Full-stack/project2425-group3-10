@@ -1,6 +1,6 @@
 import express, {NextFunction, Request, Response} from "express";
 import userService from "../service/user.service";
-import {User} from "../model/user";
+import {User} from "../domain/model/user";
 
 /**
  * @swagger

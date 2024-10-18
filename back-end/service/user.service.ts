@@ -1,4 +1,4 @@
-import {User} from "../model/user";
+import {User} from "../domain/model/user";
 import userDb from "../repository/user.db";
 
 const getAllUsers = (): User[]=>{
