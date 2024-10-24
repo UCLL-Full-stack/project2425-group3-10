@@ -1,23 +1,23 @@
 import {User} from "../domain/model/user";
-import userDb from "../repository/user.db";
+import userDb from "../domain/data-access/user.db";
 
-const getAllUsers = (): User[]=>{
+const getAllUsers = (): Promise<User[]>=>{
     return userDb.getAllUsers()
 };
 
-const getUserById= (userId: number): User | undefined =>{
+const getUserById= (userId: number): Promise<User> =>{
     return userDb.getUserById(userId)
 }
 
-const createUser= (newUser: User): User =>{
+const createUser= (newUser: User): Promise<User> =>{
     return userDb.createUser(newUser)
 }
 
-const updateUser =(updatedUser: User): User => {
+const updateUser =(updatedUser: User): Promise<User> => {
     return userDb.updateUser(updatedUser)
 }
 
-const deleteUser = (userId: number): User | undefined => {
+const deleteUser = (userId: number): Promise<User> => {
     return userDb.deleteUser(userId)
 }
 export default {

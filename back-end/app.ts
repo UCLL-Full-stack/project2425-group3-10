@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -12,7 +12,7 @@ const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(userRouter)
+app.use('/users', userRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
@@ -37,3 +37,11 @@ app.listen(port || 3000, () => {
     console.log(`PlayPal API is running on port ${port}.`);
 });
 
+
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    res.status(400).json({
+        status: "application error",
+        message: err.message,
+    });
+});
