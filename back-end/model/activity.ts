@@ -1,13 +1,13 @@
 import {TypeOfActivity} from "../types";
 
 
-export class Activity{
-    private id?:number;
-    private name:string;
-    private description:string;
-    private type:TypeOfActivity;
+export class Activity {
+    private id?: number;
+    private name: string;
+    private description: string;
+    private type: TypeOfActivity;
 
-    constructor(activity:{id:number; name:string; description:string; type:TypeOfActivity}) {
+    constructor(activity: { id: number; name: string; description: string; type: TypeOfActivity }) {
         this.id = activity.id;
         this.name = activity.name;
         this.description = activity.description;
@@ -15,7 +15,7 @@ export class Activity{
     }
 
 
-    getId(): number|undefined {
+    getId(): number | undefined {
         return this.id;
     }
 
@@ -31,12 +31,12 @@ export class Activity{
         return this.type;
     }
 
-    equals(activity:Activity){
-        return(
-            this.id === activity.getId()&&
-                this.name === activity.getName()&&
-                this.description === activity.getDescription()&&
-                this.type === activity.getType()
+    equals(activity: Activity) {
+        return (
+            this.id === activity.getId() &&
+            this.name === activity.getName() &&
+            this.description === activity.getDescription() &&
+            this.type === activity.getType()
         )
     }
 }
