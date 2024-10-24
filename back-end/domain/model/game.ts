@@ -1,4 +1,4 @@
-import {Genre} from "../types";
+import {Genre} from "../../types";
 
 export class Game{
     private id?:number;

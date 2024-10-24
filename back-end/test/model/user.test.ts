@@ -1,4 +1,4 @@
-import {User} from "../../model/user";
+import {User} from "../../domain/model/user";
 
 const validUser: User = new User({
     id: 0,
