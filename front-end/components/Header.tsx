@@ -18,7 +18,7 @@ const Header : React.FC = () => {
                 </h1>
             </div>
             <nav className="navbar">
-                <a href="home" >Home</a>
+                <a href="" >Home</a>
                 <a href="games" >Games</a>
                 <a href="community">Community</a>
                 <a href="about" >About</a>
