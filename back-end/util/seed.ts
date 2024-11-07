@@ -1,9 +1,16 @@
-import { PrismaClient } from '@prisma/client';
 import { database } from './db.server';
+import { ImageLinks } from './ImageLinks';
 
 async function main() {
 
-
+    await database.profileAchievement.deleteMany();
+    await database.profileGames.deleteMany();
+    await database.group.deleteMany();
+    await database.activity.deleteMany();
+    await database.achievement.deleteMany();
+    await database.game.deleteMany();
+    await database.profile.deleteMany();
+    await database.user.deleteMany();
 
     const users = [
         {
@@ -33,18 +40,18 @@ async function main() {
                             {
                                 game: {
                                     create: {
-                                        name: 'Battle Arena',
-                                        genre: 'Action',
-                                        logo: 'battle_arena_logo.png',  // Added logo field
+                                        name: 'Destiny 2',
+                                        genre: 'FPS',
+                                        logo: Buffer.from(ImageLinks.DESTINY2_BASE64_LOGO || '', 'base64'),  // Added logo field
                                         activities: {
                                             create: [
                                                 {
-                                                    name: 'Team Battle',
-                                                    genre: 'PvP',
+                                                    name: 'KingsFall',
+                                                    genre: 'PVE',
                                                     groups: {
                                                         create: {
                                                             name: 'Group One',
-                                                            maxPlayers: 10,
+                                                            maxPlayers: 6,
                                                             currentPlayer: 5,
                                                         }
                                                     }
@@ -86,19 +93,19 @@ async function main() {
                             {
                                 game: {
                                     create: {
-                                        name: 'Puzzle World',
-                                        genre: 'Puzzle',
-                                        logo: 'puzzle_world_logo.png',  // Added logo field
+                                        name: 'BLACK OPS 6',
+                                        genre: 'FPS',
+                                        logo: Buffer.from(ImageLinks.BO6_BASE64_LOGO, 'base64'),  // Added logo field
                                         activities: {
                                             create: [
                                                 {
-                                                    name: 'Solo Puzzle',
-                                                    genre: 'Single Player',
+                                                    name: 'Zombies',
+                                                    genre: 'PVE',
                                                     groups: {
                                                         create: {
-                                                            name: 'Puzzle Group',
-                                                            maxPlayers: 1,
-                                                            currentPlayer: 1,
+                                                            name: 'Easteregg',
+                                                            maxPlayers: 4,
+                                                            currentPlayer: 3,
                                                         }
                                                     }
                                                 }
@@ -121,22 +128,22 @@ async function main() {
         });
     }
 
-    // Additional Game Data
+    // Additional Game Data - Valorant with base64 logo
     const games = [
         {
-            name: 'Adventure Quest',
-            genre: 'RPG',
-            logo: 'adventure_quest_logo.png',  // Added logo field
+            name: 'Valorant',
+            genre: 'FPS',
+            logo: Buffer.from(ImageLinks.VALORANT_BASE64_LOGO, 'base64'),
             activities: {
                 create: [
                     {
-                        name: 'Dungeon Raid',
-                        genre: 'Co-op',
+                        name: 'Ranked Match',
+                        genre: 'Competitive',
                         groups: {
                             create: {
-                                name: 'Raiders Group',
-                                maxPlayers: 20,
-                                currentPlayer: 15,
+                                name: 'Competitive Group',
+                                maxPlayers: 10,
+                                currentPlayer: 10,
                             }
                         }
                     }

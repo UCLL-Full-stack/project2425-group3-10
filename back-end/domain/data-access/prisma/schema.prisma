@@ -31,7 +31,7 @@ model Game {
   genre      String
   activities Activity[]
   profiles   ProfileGames[]
-  logo       String         @default("placeholder")
+  logo       Bytes
 }
 
 model ProfileGames {

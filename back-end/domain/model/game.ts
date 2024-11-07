@@ -5,13 +5,13 @@ export class Game{
     private id?:number;
     private name:string;
     private genre: Genre;
-    private logo : string;
+    private logo! : string;
 
-    constructor(game:{id:number; name:string; genre:Genre; logo:string}) {
+    constructor(game:{id:number; name:string; genre:Genre; logo:Buffer|string}) {
         this.id = game.id;
         this.genre = game.genre;
         this.name = game.name;
-        this.logo = game.logo
+        this.setLogo(game.logo);
     }
 
     getId(): number|undefined {
@@ -28,6 +28,10 @@ export class Game{
 
     getLogo(): string {
         return this.logo;
+    }
+
+    setLogo(logo: string | Buffer): void {
+        this.logo = logo instanceof Buffer ? logo.toString('base64') : logo;
     }
 
     equal(game:Game):boolean{

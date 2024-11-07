@@ -28,7 +28,7 @@ const createGame = async (newGame: Game):Promise<Game> => {
         data: {
             name: newGame.getName(),
             genre: newGame.getGenre(),
-            logo: newGame.getLogo()
+            logo: Buffer.from(newGame.getLogo(), 'base64')
         }
     });
     return Game.from(game);
@@ -42,7 +42,7 @@ const updateGame = async (updatedGame: Game):Promise<Game> => {
         data: {
             name: updatedGame.getName(),
             genre: updatedGame.getGenre(),
-            logo: updatedGame.getLogo()
+            logo: Buffer.from(updatedGame.getLogo(), 'base64')
         }
     });
     return Game.from(game);

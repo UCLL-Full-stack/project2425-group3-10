@@ -2,7 +2,7 @@ import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 import { Game } from '@/types';
 import gameService from '@/services/GameService';
-import GameCard from '@/components/GameCard';
+import GameCard from '@/components/game/GameCard';
 
 const Games: React.FC = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -18,7 +18,6 @@ const Games: React.FC = () => {
                 setError(response.statusText);
             } else {
                 const games = await response.json();
-                console.log(games);
                 setGames(games);
             }
         } catch (error) {
