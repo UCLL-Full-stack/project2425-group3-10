@@ -2,7 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import { database } from './db.server';
 
 async function main() {
-    // Users with profiles
+
+
+
     const users = [
         {
             email: 'Pepe@example.com',
@@ -33,6 +35,7 @@ async function main() {
                                     create: {
                                         name: 'Battle Arena',
                                         genre: 'Action',
+                                        logo: 'battle_arena_logo.png',  // Added logo field
                                         activities: {
                                             create: [
                                                 {
@@ -85,6 +88,7 @@ async function main() {
                                     create: {
                                         name: 'Puzzle World',
                                         genre: 'Puzzle',
+                                        logo: 'puzzle_world_logo.png',  // Added logo field
                                         activities: {
                                             create: [
                                                 {
@@ -122,6 +126,7 @@ async function main() {
         {
             name: 'Adventure Quest',
             genre: 'RPG',
+            logo: 'adventure_quest_logo.png',  // Added logo field
             activities: {
                 create: [
                     {

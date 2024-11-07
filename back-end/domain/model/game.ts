@@ -1,4 +1,5 @@
 import {Genre} from "../../types";
+import {Game as GamePrisma} from '@prisma/client';
 
 export class Game{
     private id?:number;
@@ -34,5 +35,8 @@ export class Game{
             this.id === game.getId()&&
                 this.name === game.getName()
         )
+    }
+    static from({id, name, genre, logo}:GamePrisma):Game{
+        return new Game({id, name, genre: genre as Genre, logo})
     }
 }

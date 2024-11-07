@@ -11,7 +11,7 @@ import {User} from "../domain/model/user";
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
- *      Users:
+ *      User:
  *          type: object
  *          properties:
  *            id:
@@ -41,9 +41,9 @@ const userRouter = express.Router()
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users: User[] = await userService.getAllUsers();
-        res.status(200).json(users);  // Send the users array as a JSON response
+        res.status(200).json(users);
     } catch (error) {
-        next(error);  // Pass any errors to the error-handling middleware
+        next(error);
     }
 });
 
