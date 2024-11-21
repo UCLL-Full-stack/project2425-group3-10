@@ -2,23 +2,30 @@ import { Achievement } from './achievement';
 import { Achievement as AchievementPrisma,
     ProfileAchievement as profileAchievementPrisma
 } from "@prisma/client";
+import achievementService from '../../service/achievement.service';
 
 export class ProfileAchievement {
     private achievement: Achievement;
     private earned: boolean;
     private achievedDate: Date;
+    private profileId: number;
 
-    constructor(achievement: Achievement, earned: boolean, achievedDate: Date) {
+    constructor(achievement: Achievement, earned: boolean, achievedDate: Date, profileId:number) {
         this.achievement = achievement;
         this.earned = earned;
         this.achievedDate = achievedDate;
+        this.profileId=profileId
     }
 
-    static from(profileAchievementPrisma: profileAchievementPrisma): ProfileAchievement {
+    static async from(profileAchievementPrisma: profileAchievementPrisma): Promise<ProfileAchievement> {
+
+        const achievementData = await achievementService.getAchievementById(profileAchievementPrisma.achievementId);
+
         return new ProfileAchievement(
-            Achievement.from(profileAchievementPrisma.achievement),
+            achievementData,
             profileAchievementPrisma.earned,
-            profileAchievementPrisma.achievedDate
+            profileAchievementPrisma.achievedDate,
+            profileAchievementPrisma.profileId
         );
     }
 
