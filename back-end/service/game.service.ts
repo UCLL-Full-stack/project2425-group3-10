@@ -1,4 +1,4 @@
-import gameDb from '../domain/data-access/game.db';
+import gameDb from '../repository/game.db';
 import { Game } from '../domain/model/game';
 
 const getAllGames = async (): Promise<Game[]> => {

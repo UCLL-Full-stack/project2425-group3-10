@@ -1,17 +1,17 @@
+import { Achievement as AchievementPrisma } from "@prisma/client";
+
 export class Achievement{
     private id:number;
     private name:string;
     private description:string;
-    private achievedDate:Date;
-    private earned:boolean;
 
 
-    constructor(achievement:{id:number; name:string; description:string; achievedDate:Date; earned:boolean}) {
+
+    constructor(achievement:{id:number; name:string; description:string;}) {
         this.id = achievement.id;
         this.name = achievement.name;
         this.description = achievement.description;
-        this.achievedDate = achievement.achievedDate;
-        this.earned = achievement.earned;
+
     }
 
 
@@ -27,23 +27,18 @@ export class Achievement{
         return this.description;
     }
 
-    getAchievedDate(): Date {
-        return this.achievedDate;
-    }
-
-    getEarned(): boolean {
-        return this.earned;
-    }
 
 
     equals(achievement:Achievement){
         return(
             this.id === achievement.getId()&&
             this.name === achievement.getName()&&
-            this.earned === achievement.getEarned()&&
-            this.achievedDate === achievement.getAchievedDate()&&
             this.description === achievement.getDescription()
         )
 
+    }
+
+    static from( {id, name, description}:AchievementPrisma){
+        return new Achievement({id, name, description})
     }
 }

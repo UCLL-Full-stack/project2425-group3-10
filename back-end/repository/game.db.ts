@@ -1,5 +1,5 @@
-import { Game } from '../model/game';
-import { database } from '../../util/db.server';
+import { Game } from '../domain/model/game';
+import { database } from '../util/db.server';
 
 const getALlGames = async ():Promise<Game[]> => {
     try {

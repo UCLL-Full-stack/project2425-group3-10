@@ -1,2 +1,2 @@
 .env
-/domain/data-access/prisma/migrations
+/repository/prisma/migrations

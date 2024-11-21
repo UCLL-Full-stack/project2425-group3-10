@@ -1,6 +1,12 @@
 import {User} from "./user";
 import {Achievement} from "./achievement";
 import {Game} from "./game";
+import {Profile as ProfilePrisma,
+    User as UserPrimsa,
+    ProfileAchievement as AchievementPrisma,
+    Game as GamePrisma
+} from '@prisma/client';
+import { ProfileAchievement } from './profileAchievement';
 
 export class Profile{
     private id?:number
@@ -59,4 +65,17 @@ export class Profile{
             this.gamesPlayed === profile.getGamesPlayed()
         )
     }
+
+    static from(profile:ProfilePrisma&{user:UserPrimsa; achievements:AchievementPrisma[]; games:GamePrisma[]}):Profile{
+        return new Profile({
+            id:profile.id,
+            username:profile.username,
+            pfp:profile.pfp,
+            user:User.from(profile.user),
+            achievements:profile.achievements.map((achievement)=>ProfileAchievement.from(achievement)),
+            gamesPlayed: profile.games.map((game)=>Game.from(game))
+        })
+    }
+
+
 }

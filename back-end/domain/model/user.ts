@@ -41,7 +41,7 @@ export class User {
             this.email === other.getEmail()
         )
     }
-    static from({id, email, password, role}: UserPrisma): User {
+    static from({id, email, password, role}: UserPrisma) {
         return new User({id, email, password, role: role as Role})
     }
 }

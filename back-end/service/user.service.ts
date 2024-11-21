@@ -1,5 +1,5 @@
 import {User} from "../domain/model/user";
-import userDb from "../domain/data-access/user.db";
+import userDb from "../repository/user.db";
 
 const getAllUsers = async (): Promise<User[]>=>{
     return userDb.getAllUsers()
