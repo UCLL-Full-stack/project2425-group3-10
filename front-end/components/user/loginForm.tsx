@@ -19,7 +19,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
                     <input type="password" id="password" name="password" required />
                 </div>
                 <div>
-                    <a href="#">Create account</a>
+                    <a href="/register">Create account</a>
                 </div>
                 <button type="submit">Submit</button>
             </form>
