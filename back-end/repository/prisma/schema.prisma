@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     String
+  profile  Profile?
+}
+
+model Profile {
+  id           Int                  @id @default(autoincrement())
+  username     String
+  pfp          String
+  userId       Int                  @unique
+  user         User                 @relation(fields: [userId], references: [id])
+  achievements ProfileAchievement[]
+  games        ProfileGames[]
+}
+
+model Game {
+  id         Int            @id @default(autoincrement())
+  name       String
+  genre      String
+  activities Activity[]
+  profiles   ProfileGames[]
+  logo       Bytes
+}
+
+model ProfileGames {
+  profileId Int
+  gameId    Int
+  profile   Profile @relation(fields: [profileId], references: [id])
+  game      Game    @relation(fields: [gameId], references: [id])
+
+  @@id([profileId, gameId])
+}
+
+model Activity {
+  id     Int     @id @default(autoincrement())
+  name   String
+  genre  String
+  gameId Int
+  game   Game    @relation(fields: [gameId], references: [id])
+  groups Group[]
+}
+
+model Group {
+  id            Int      @id @default(autoincrement())
+  name          String
+  maxPlayers    Int
+  currentPlayer Int
+  activityId    Int
+  activity      Activity @relation(fields: [activityId], references: [id])
+}
+
+model Achievement {
+  id                  Int                  @id @default(autoincrement())
+  name                String
+  description         String
+  profileAchievements ProfileAchievement[]
+}
+
+model ProfileAchievement {
+  profileId     Int
+  achievementId Int
+  earned        Boolean
+  achievedDate  DateTime
+  profile       Profile     @relation(fields: [profileId], references: [id])
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+  @@id([profileId, achievementId]) // Composite primary key
+}
