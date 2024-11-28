@@ -8,6 +8,15 @@ export type Game = {
     logo: string
 }
 
+
+
+
+export type User = {
+    email: string;
+    password: string;
+    role: string
+}
+
 export type CardType = {
     title: string;
     genre: string;

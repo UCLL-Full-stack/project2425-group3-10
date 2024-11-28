@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import userService from '@/services/UserService';
 
 const RegisterForm: React.FC = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        role: ''
-
+        role: 'User'
     });
 
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,22 +22,13 @@ const RegisterForm: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://127.0.0.1:8080/user/addUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                setErrorMessage(errorData.message || 'Something went wrong');
-                return;
-            }
+            console.log(`Creating users with values ${formData.email} ${formData.password} ${formData.role}`);
+            const response = await userService.createUser(formData);
 
             // Clear form or handle success response
             console.log('User registered successfully');
+            setErrorMessage('User registered successfully!')
+            return response;
         } catch (error) {
             setErrorMessage('Failed to register user');
         }
@@ -53,19 +44,19 @@ const RegisterForm: React.FC = () => {
 
                 <label htmlFor="email" className="text-left w-3/5">Email</label>
                 <input
-                    type="text"
-                    name="name"
-                    id="name"
+                    type="email"
+                    name="email"  // Corrected 'name' attribute
+                    id="email"    // Corrected 'id' attribute
                     value={formData.email}
                     onChange={handleChange}
                     className="w-3/5 border rounded-lg h-9 mb-3 px-2 focus:outline-none focus:border-cyan-600"
                 />
 
-                <label htmlFor="Password" className="text-left w-3/5">Password</label>
+                <label htmlFor="password" className="text-left w-3/5">Password</label>
                 <input
-                    type="text"
-                    name="email"
-                    id="email"
+                    type="password"  // Changed type to 'password'
+                    name="password"  // Corrected 'name' attribute
+                    id="password"    // Corrected 'id' attribute
                     value={formData.password}
                     onChange={handleChange}
                     className="w-3/5 border rounded-lg h-9 mb-3 px-2 focus:outline-none focus:border-cyan-600"
@@ -79,8 +70,10 @@ const RegisterForm: React.FC = () => {
                     onChange={handleChange}
                     className="w-3/5 border rounded-lg h-9 mb-5 px-2 focus:outline-none border-cyan-600"
                 >
-                    <option value={1}>user</option>
-                    <option value={0}>admin</option>
+                    <option value="user">User</option>
+                    {/* Corrected value to 'user' */}
+                    <option value="admin">Admin</option>
+                    {/* Corrected value to 'admin' */}
                 </select>
 
                 <button type="submit" className="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-500 w-2/5">

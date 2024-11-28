@@ -86,7 +86,12 @@ userRouter.get('/:userId', async (req: Request, res: Response, next: NextFunctio
  */
 userRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newUser: User = req.body;
+        const newUser: User = new User({
+            email: req.body.email,
+            password: req.body.password,
+            role: req.body.role,
+
+        })
         const user: User = await userService.createUser(newUser);
         res.status(200).json(user);
     } catch (error) {
