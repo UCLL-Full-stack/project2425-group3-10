@@ -1,24 +1,22 @@
-import {TypeOfActivity} from "../../types";
-import {Game} from "./game";
-
+import { TypeOfActivity} from '../../types';
+import { Activity as ActivityPrisma } from '@prisma/client';
 
 export class Activity{
-    private id?:number;
-    private name:string;
-    private description:string;
-    private type:TypeOfActivity;
-    private game:Game
+    private id?: number;
+    private name: string;
+    private type: TypeOfActivity;
 
-    constructor(activity:{id:number; name:string; description:string; type:TypeOfActivity; game:Game}) {
+    constructor(activity:{
+        id:number;
+        name:string;
+        type:TypeOfActivity
+    }) {
         this.id = activity.id;
         this.name = activity.name;
-        this.description = activity.description;
         this.type = activity.type;
-        this.game = activity.game;
     }
 
-
-    getId(): number|undefined {
+    getId(): number | undefined {
         return this.id;
     }
 
@@ -26,32 +24,19 @@ export class Activity{
         return this.name;
     }
 
-    getDescription(): string {
-        return this.description;
-    }
-
     getType(): TypeOfActivity {
         return this.type;
     }
-    getGame(): Game{
-        return this.game
-    }
 
-    equals(activity:Activity){
-        return(
+    equals(activity:Activity):boolean{
+        return (
             this.id === activity.getId()&&
-                this.name === activity.getName()&&
-                this.description === activity.getDescription()&&
-                this.type === activity.getType()&&
-                this.game === activity.getGame()
+            this.name === activity.getName()&&
+            this.type === activity.getType()
         )
     }
 
-    from(activity:Activity){
-        this.id = activity.getId();
-        this.name = activity.getName();
-        this.description = activity.getDescription();
-        this.type = activity.getType();
-        this.game = activity.getGame();
+    static from({id, name, type}:ActivityPrisma){
+        return new Activity({id, name, type: type as TypeOfActivity})
     }
 }

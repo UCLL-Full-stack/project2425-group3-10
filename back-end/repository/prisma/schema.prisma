@@ -8,31 +8,57 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int          @id @default(autoincrement())
+  email    String       @unique
   password String
   role     String
   profile  Profile?
-  Groups   Group[]
+  groups   UserGroups[]
 }
 
 model Profile {
-  id           Int                  @id @default(autoincrement())
-  username     String
-  pfp          String
-  userId       Int                  @unique
-  user         User                 @relation(fields: [userId], references: [id])
-  achievements ProfileAchievement[]
-  games        ProfileGames[]
+  id       Int            @id @default(autoincrement())
+  username String
+  pfp      Bytes
+  userId   Int            @unique
+  user     User           @relation(fields: [userId], references: [id])
+  games    ProfileGames[]
+}
+
+model Group {
+  id             Int          @id @default(autoincrement())
+  name           String
+  Users          UserGroups[]
+  maxPlayers     Int
+  currentPlayers Int
+  activityId     Int
+  activity       Activity     @relation(fields: [activityId], references: [id])
 }
 
 model Game {
   id         Int            @id @default(autoincrement())
   name       String
   genre      String
-  activities Activity[]
   profiles   ProfileGames[]
+  Activities Activity[]
   logo       Bytes
+}
+
+model Activity {
+  id     Int     @id @default(autoincrement())
+  name   String
+  type   String
+  game   Game    @relation(fields: [id], references: [id])
+  Groups Group[]
+}
+
+model UserGroups {
+  userId  Int
+  groupId Int
+  user    User  @relation(fields: [userId], references: [id])
+  group   Group @relation(fields: [groupId], references: [id])
+
+  @@id([userId, groupId])
 }
 
 model ProfileGames {
@@ -42,41 +68,4 @@ model ProfileGames {
   game      Game    @relation(fields: [gameId], references: [id])
 
   @@id([profileId, gameId])
-}
-
-model Activity {
-  id     Int     @id @default(autoincrement())
-  name   String
-  genre  String
-  gameId Int
-  game   Game    @relation(fields: [gameId], references: [id])
-  groups Group[]
-}
-
-model Group {
-  id            Int      @id @default(autoincrement())
-  name          String
-  maxPlayers    Int
-  currentPlayer Int
-  activityId    Int
-  members       User[]
-  activity      Activity @relation(fields: [activityId], references: [id])
-}
-
-model Achievement {
-  id                  Int                  @id @default(autoincrement())
-  name                String
-  description         String
-  profileAchievements ProfileAchievement[]
-}
-
-model ProfileAchievement {
-  profileId     Int
-  achievementId Int
-  earned        Boolean
-  achievedDate  DateTime
-  profile       Profile     @relation(fields: [profileId], references: [id])
-  achievement   Achievement @relation(fields: [achievementId], references: [id])
-
-  @@id([profileId, achievementId]) // Composite primary key
 }

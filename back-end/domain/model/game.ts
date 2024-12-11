@@ -2,16 +2,16 @@ import {Genre} from "../../types";
 import {Game as GamePrisma} from '@prisma/client';
 
 export class Game{
-    private id?:number;
-    private name:string;
-    private genre: Genre;
-    private logo! : string;
+    readonly id?:number;
+    readonly name:string;
+    readonly genre: Genre;
+    readonly logo! : string;
 
     constructor(game:{id:number; name:string; genre:Genre; logo:Buffer|string}) {
         this.id = game.id;
         this.genre = game.genre;
         this.name = game.name;
-        this.setLogo(game.logo);
+        this.logo = game.logo instanceof Buffer ? game.logo.toString('base64') : game.logo;
     }
 
     getId(): number|undefined {
@@ -30,9 +30,7 @@ export class Game{
         return this.logo;
     }
 
-    setLogo(logo: string | Buffer): void {
-        this.logo = logo instanceof Buffer ? logo.toString('base64') : logo;
-    }
+
 
     equal(game:Game):boolean{
         return (
@@ -40,7 +38,7 @@ export class Game{
                 this.name === game.getName()
         )
     }
-    static from({id, name, genre, logo}:GamePrisma):Game{
-        return new Game({id, name, genre: genre as Genre, logo})
+    static from({id, name, genre, logo}:GamePrisma){
+        return new Game({id, name, genre: genre as Genre, logo:Buffer.from(logo)})
     }
 }
