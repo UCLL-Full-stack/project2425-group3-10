@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
-import { useEffect, useState } from 'react';
-import { Game } from '@/types';
+import {useEffect, useState} from 'react';
+import {Game} from '@/types';
 import gameService from '@/services/GameService';
 import GameCard from '@/components/game/GameCard';
 import GameOverview from '@/components/game/GameOverview';
@@ -10,7 +10,10 @@ const Games: React.FC = () => {
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [error, setError] = useState<string>('');
 
-    const get
+    const handleSelectedGame = (game: Game) => {
+        setSelectedGame(game)
+        console.log(game)
+    }
 
     const getGames = async () => {
         setError('');
@@ -34,10 +37,10 @@ const Games: React.FC = () => {
 
     return (
         <>
-            <Header />
+            <Header/>
             {error && <p className="text-red-500">{error}</p>}
-            <div>
-                <GameOverview games={games} onGameClick={}/>
+            <div className="max-w-20">
+                <GameOverview games={games} onGameClick={handleSelectedGame}/>
             </div>
         </>
     );
