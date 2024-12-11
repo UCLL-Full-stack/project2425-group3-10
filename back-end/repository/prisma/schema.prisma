@@ -13,6 +13,7 @@ model User {
   password String
   role     String
   profile  Profile?
+  Groups   Group[]
 }
 
 model Profile {
@@ -58,6 +59,7 @@ model Group {
   maxPlayers    Int
   currentPlayer Int
   activityId    Int
+  members       User[]
   activity      Activity @relation(fields: [activityId], references: [id])
 }
 

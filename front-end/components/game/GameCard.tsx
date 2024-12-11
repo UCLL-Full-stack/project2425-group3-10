@@ -14,15 +14,15 @@ type Props= {
 const GameCard: React.FC<Props> = ({game}: Props) =>{
     const imageUrl = `data:image/png;base64,${game.logo}`
     return (
-        <Card sx={{ maxWidth: 345, margin: 'auto', marginBottom: 2 }}>
+        <Card sx={{ Width:'20%' , marginBottom: 10}}>
             <CardMedia
                 component="img"
                 height="300"
                 image={imageUrl}
                 alt={`${game.name} cover`}
                 sx={{
-                    objectFit: 'cover', // This ensures the image fully covers the area without distortion
-                    objectPosition: 'center', // This centers the image within the CardMedia component
+                    objectFit: 'cover',
+                    objectPosition: 'center',
                 }}
             />
         </Card>

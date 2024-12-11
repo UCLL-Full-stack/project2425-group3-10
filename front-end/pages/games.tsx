@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react';
 import { Game } from '@/types';
 import gameService from '@/services/GameService';
 import GameCard from '@/components/game/GameCard';
+import GameOverview from '@/components/game/GameOverview';
 
 const Games: React.FC = () => {
     const [games, setGames] = useState<Game[]>([]);
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
     const [error, setError] = useState<string>('');
+
+    const get
 
     const getGames = async () => {
         setError('');
@@ -33,10 +36,8 @@ const Games: React.FC = () => {
         <>
             <Header />
             {error && <p className="text-red-500">{error}</p>}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-                {games && games.map((game) => (
-                    <GameCard key={game.id} game={game} />
-                ))}
+            <div>
+                <GameOverview games={games} onGameClick={}/>
             </div>
         </>
     );

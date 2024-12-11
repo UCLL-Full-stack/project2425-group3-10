@@ -6,7 +6,7 @@ import {
     Profile as ProfilePrisma,
     User as UserPrimsa,
     ProfileAchievement as AchievementPrisma,
-    Game as GamePrisma
+    Game as GamePrisma, ProfileGames
 } from '@prisma/client';
 
 export class Profile {
@@ -80,23 +80,30 @@ export class Profile {
 
     static async from(profile: ProfilePrisma & {
         user: UserPrimsa;
-        achievements: AchievementPrisma[];
-        games: GamePrisma[];
+        achievements: (AchievementPrisma & { achievement: Achievement })[];
+        games: (ProfileGames & { game: GamePrisma })[];
     }): Promise<Profile> {
-
-        // omdat achievements in profile achievements met een async gecalled worden, moeten deze hier ook met async gecalled worden.
+        // Convert achievements into `ProfileAchievement` instances
         const achievements = await Promise.all(
-            profile.achievements.map((profileAchievement) => ProfileAchievement.from(profileAchievement)
+            profile.achievements.map(async (profileAchievement) =>
+                ProfileAchievement.from({
+                    ...profileAchievement,
+                    achievement: profileAchievement.achievement,
+                })
             )
+        );
+
+        const gamesPlayed = profile.games.map((profileGame) =>
+            Game.from(profileGame.game)
         );
 
         return new Profile({
             id: profile.id,
             username: profile.username,
             pfp: profile.pfp,
-            user: User.from(profile.user), // Assuming User.from is synchronous
-            achievements: achievements,
-            gamesPlayed: profile.games.map((game) => Game.from(game))
+            user: User.from(profile.user),
+            achievements,
+            gamesPlayed,
         });
     }
 

@@ -46,4 +46,12 @@ export class Activity{
                 this.game === activity.getGame()
         )
     }
+
+    from(activity:Activity){
+        this.id = activity.getId();
+        this.name = activity.getName();
+        this.description = activity.getDescription();
+        this.type = activity.getType();
+        this.game = activity.getGame();
+    }
 }
