@@ -8,6 +8,13 @@ export type Game = {
     logo: string
 }
 
+export type Activity = {
+    id: number;
+    name: string;
+    description: string;
+    type: string;
+}
+
 
 
 
