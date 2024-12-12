@@ -1,165 +1,113 @@
-import { database } from './db.server';
+import { PrismaClient } from '@prisma/client';
 import { ImageLinks } from './ImageLinks';
 
+const prisma = new PrismaClient();
+
 async function main() {
+    // Clear existing data
+    await prisma.group.deleteMany();
+    await prisma.activity.deleteMany();
+    await prisma.game.deleteMany();
+    await prisma.user.deleteMany();
 
-    await database.profileAchievement.deleteMany();
-    await database.profileGames.deleteMany();
-    await database.group.deleteMany();
-    await database.activity.deleteMany();
-    await database.achievement.deleteMany();
-    await database.game.deleteMany();
-    await database.profile.deleteMany();
-    await database.user.deleteMany();
-
+    // Create users
     const users = [
         {
-            email: 'Pepe@example.com',
+            email: 'user1@example.com',
             password: 'password1',
             role: 'USER',
-            profile: {
-                create: {
-                    username: 'UserOne',
-                    pfp: 'user1_pfp.png',
-                    achievements: {
-                        create: [
-                            {
-                                achievement: {
-                                    create: {
-                                        name: 'First Win',
-                                        description: 'Awarded for the first victory.'
-                                    }
-                                },
-                                earned: true,
-                                achievedDate: new Date(),
-                            },
-                        ],
-                    },
-                    games: {
-                        create: [
-                            {
-                                game: {
-                                    create: {
-                                        name: 'Destiny 2',
-                                        genre: 'FPS',
-                                        logo: Buffer.from(ImageLinks.DESTINY2_BASE64_LOGO || '', 'base64'),  // Added logo field
-                                        activities: {
-                                            create: [
-                                                {
-                                                    name: 'KingsFall',
-                                                    genre: 'PVE',
-                                                    groups: {
-                                                        create: {
-                                                            name: 'Group One',
-                                                            maxPlayers: 6,
-                                                            currentPlayer: 5,
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
         },
         {
-            email: 'ValorantE2@example.com',
+            email: 'user2@example.com',
             password: 'password2',
             role: 'ADMIN',
-            profile: {
-                create: {
-                    username: 'AdminUser',
-                    pfp: 'admin_pfp.png',
-                    achievements: {
-                        create: [
-                            {
-                                achievement: {
-                                    create: {
-                                        name: 'Master Admin',
-                                        description: 'Awarded for reaching admin level.'
-                                    }
-                                },
-                                earned: true,
-                                achievedDate: new Date(),
-                            },
-                        ],
-                    },
-                    games: {
-                        create: [
-                            {
-                                game: {
-                                    create: {
-                                        name: 'BLACK OPS 6',
-                                        genre: 'FPS',
-                                        logo: Buffer.from(ImageLinks.BO6_BASE64_LOGO, 'base64'),  // Added logo field
-                                        activities: {
-                                            create: [
-                                                {
-                                                    name: 'Zombies',
-                                                    genre: 'PVE',
-                                                    groups: {
-                                                        create: {
-                                                            name: 'Easteregg',
-                                                            maxPlayers: 4,
-                                                            currentPlayer: 3,
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        }
+        },
+        {
+            email: 'user3@example.com',
+            password: 'password3',
+            role: 'USER',
+        },
     ];
 
-    // Loop over the users array to create users and their relations in the database
     for (const user of users) {
-        await database.user.create({
+        await prisma.user.create({
             data: user,
         });
     }
 
-    // Additional Game Data - Valorant with base64 logo
+    // Create games
     const games = [
+        {
+            name: 'Destiny 2',
+            genre: 'FPS',
+            logo: Buffer.from(ImageLinks.DESTINY2_BASE64_LOGO || '', 'base64'),
+        },
         {
             name: 'Valorant',
             genre: 'FPS',
-            logo: Buffer.from(ImageLinks.VALORANT_BASE64_LOGO, 'base64'),
-            activities: {
-                create: [
-                    {
-                        name: 'Ranked Match',
-                        genre: 'Competitive',
-                        groups: {
-                            create: {
-                                name: 'Competitive Group',
-                                maxPlayers: 10,
-                                currentPlayer: 10,
-                            }
-                        }
-                    }
-                ]
-            }
+            logo: Buffer.from(ImageLinks.VALORANT_BASE64_LOGO || '', 'base64'),
+        },
+        {
+            name: 'Minecraft',
+            genre: 'Sandbox',
+            logo: Buffer.from(ImageLinks.BO6_BASE64_LOGO || '', 'base64'),
+        },
+    ];
+
+    const createdGames = [];
+    for (const game of games) {
+        const createdGame = await prisma.game.create({
+            data: game,
+        });
+        createdGames.push(createdGame);
+    }
+
+    console.log('Seed data created: Users and Games');
+
+    // Create Activities for each game
+    const activitiesData = [
+        {
+            gameName: 'Destiny 2',
+            activities: [
+                { name: 'Nightfall Raid', type: 'PvE' },
+                { name: 'Crucible Match', type: 'PvP' }
+            ]
+        },
+        {
+            gameName: 'Valorant',
+            activities: [
+                { name: 'Competitive Match', type: 'Ranked' },
+                { name: 'Spike Rush', type: 'Casual' }
+            ]
+        },
+        {
+            gameName: 'Minecraft',
+            activities: [
+                { name: 'Survival Mode', type: 'Adventure' },
+                { name: 'Creative Building', type: 'Sandbox' }
+            ]
         }
     ];
 
-    // Loop over the games array to create games in the database
-    for (const game of games) {
-        await database.game.create({
-            data: game,
-        });
+    for (const gameData of activitiesData) {
+        const game = createdGames.find(g => g.name === gameData.gameName);
+        if (game) {
+            for (const activity of gameData.activities) {
+                await prisma.activity.create({
+                    data: {
+                        name: activity.name,
+                        type: activity.type,
+                        game: {
+                            connect: { id: game.id }
+                        }
+                        // Prisma will auto-increment the `id` field
+                    }
+                });
+            }
+        }
     }
 
-    console.log('Seed data has been successfully created');
+    console.log('Activities have been added to games');
 }
 
 main()
@@ -168,5 +116,5 @@ main()
         process.exit(1);
     })
     .finally(async () => {
-        await database.$disconnect();
+        await prisma.$disconnect();
     });

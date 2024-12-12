@@ -1,6 +1,7 @@
 import { Activity } from '../domain/model/activity';
 import { database } from '../util/db.server';
 
+/*
 const getAllActivities = async () => {
     try {
         const activitiesPrisma = await database.activity.findMany({
@@ -16,15 +17,18 @@ const getAllActivities = async () => {
         throw new Error(`Error occurred while getting all activities`);
     }
 }
+*/
 
-const getActivitiesByGameId = async (gameId: number) => {
+const getActivitiesByGameId = async (gameId: number): Promise<Activity[]> => {
     try {
         const activitiesPrisma = await database.activity.findMany({
             where: {
-                gameId: gameId
+                game:{
+                    id: gameId
+                }
             },
             include: {
-                groups: true,
+                Groups: true,
                 game: true
             }
         });
@@ -35,3 +39,5 @@ const getActivitiesByGameId = async (gameId: number) => {
         throw new Error(`Error occurred while getting all activities`);
     }
 }
+
+export default {getActivitiesByGameId, /*getAllActivities*/}

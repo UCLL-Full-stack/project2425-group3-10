@@ -1,15 +1,15 @@
-import { TypeOfActivity} from '../../types';
+import { TypeOfActivity } from '../../types';
 import { Activity as ActivityPrisma } from '@prisma/client';
 
-export class Activity{
-    private id?: number;
-    private name: string;
-    private type: TypeOfActivity;
+export class Activity {
+    readonly id: number;
+    readonly name: string;
+    readonly type: TypeOfActivity;
 
-    constructor(activity:{
-        id:number;
-        name:string;
-        type:TypeOfActivity
+    constructor(activity: {
+        id: number;
+        name: string;
+        type: TypeOfActivity
     }) {
         this.id = activity.id;
         this.name = activity.name;
@@ -28,15 +28,15 @@ export class Activity{
         return this.type;
     }
 
-    equals(activity:Activity):boolean{
+    equals(activity: Activity): boolean {
         return (
-            this.id === activity.getId()&&
-            this.name === activity.getName()&&
+            this.id === activity.getId() &&
+            this.name === activity.getName() &&
             this.type === activity.getType()
-        )
+        );
     }
 
-    static from({id, name, type}:ActivityPrisma){
-        return new Activity({id, name, type: type as TypeOfActivity})
+    static from({ id, name, type }: ActivityPrisma): Activity {
+        return new Activity({id, name, type: type as TypeOfActivity });
     }
 }
