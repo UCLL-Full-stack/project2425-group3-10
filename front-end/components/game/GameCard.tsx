@@ -14,7 +14,7 @@ type Props= {
 const GameCard: React.FC<Props> = ({game}: Props) =>{
     const imageUrl = `data:image/png;base64,${game.logo}`
     return (
-        <Card sx={{ Width:'20%' , marginBottom: 10}}>
+        <Card sx={{ Width:'50%' , marginBottom: 10}}>
             <CardMedia
                 component="img"
                 height="300"

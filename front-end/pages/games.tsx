@@ -39,7 +39,7 @@ const Games: React.FC = () => {
         <>
             <Header/>
             {error && <p className="text-red-500">{error}</p>}
-            <div className="max-w-20">
+            <div className="max-w-150">
                 <GameOverview games={games} onGameClick={handleSelectedGame}/>
             </div>
         </>

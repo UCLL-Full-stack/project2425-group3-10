@@ -35,15 +35,14 @@ const GameOverview: React.FC<Props> = ({games, onGameClick}: Props) => {
 
     return (
         <>
-            <div className="grid grid-cols-2 max-w-20">
+            <div className="grid grid-cols-2 max-w-500">
                 {games && games.map((gameItem) => (
                     <div
                         key={gameItem.id}
                         onClick={() => setGame(gameItem)}
-                        className="max-w-20"
+                        className="max-w-500"
                     >
                         <GameCard game={gameItem}/>
-                        {/* if game is present, AND game.id is the same as the gameItem.Id AND activities have been loaded THEN render the activity table*/}
                         {game && game.id === gameItem.id && activities && <ActivityTable activities={activities}/>}
                     </div>
                 ))}
