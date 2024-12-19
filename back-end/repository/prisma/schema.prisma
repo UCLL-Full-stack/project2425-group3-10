@@ -45,10 +45,12 @@ model Game {
 }
 
 model Activity {
-  id     Int     @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   name   String
   type   String
-  game   Game    @relation(fields: [id], references: [id])
+  game   Game?  @relation(fields: [gameId], references: [id])
+  gameId Int?
+
   Groups Group[]
 }
 
