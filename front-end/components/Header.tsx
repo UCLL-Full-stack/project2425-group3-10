@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import LoginForm from '@/components/user/loginForm';
-import { useTranslation } from 'next-i18next';
-import { User } from '@/types';
+import { User } from "@/types";
 
 const Header: React.FC = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-    const { t } = useTranslation();
+
 
     const toggleLoginForm = () => {
         setIsLoginOpen(!isLoginOpen);

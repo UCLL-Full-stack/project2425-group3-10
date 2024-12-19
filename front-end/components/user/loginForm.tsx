@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
+
 import { Login } from '@/types';
 import UserService from '@/services/UserService';
 
@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
     const [statusMessage, setStatusMessage] = React.useState("");
 
     const router = useRouter();
-    const { t } = useTranslation();
+
 
     const validate = (): boolean => {
         let isValid = true;
