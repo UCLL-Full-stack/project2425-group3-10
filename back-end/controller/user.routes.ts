@@ -71,18 +71,88 @@ userRouter.get('/:userId', async (req: Request, res: Response, next: NextFunctio
     }
 })
 
+
 /**
  * @swagger
- * /users/create:
- *   post:
- *     summary: Create a new User.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Users'
- *     responses:
+ * paths:
+ *   /users/create:
+ *     post:
+ *       summary: Create a new user
+ *       description: Creates a new user by accepting their email, password, and role. The password will be securely hashed before saving to the database.
+ *       tags:
+ *         - Users
+ *       requestBody:
+ *         description: User details for creating a new user
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - email
+ *                 - password
+ *                 - role
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   example: user@example.com
+ *                   description: The email address of the new user.
+ *                 password:
+ *                   type: string
+ *                   example: securepassword123
+ *                   description: The password for the new user.
+ *                 role:
+ *                   type: string
+ *                   example: USER
+ *                   enum: [USER, ADMIN]
+ *                   description: The role of the new user. Either "USER" or "ADMIN".
+ *       responses:
+ *         '200':
+ *           description: User successfully created
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                     description: The unique identifier of the user.
+ *                   email:
+ *                     type: string
+ *                     example: user@example.com
+ *                     description: The email address of the user.
+ *                   role:
+ *                     type: string
+ *                     example: USER
+ *                     description: The role of the user.
+ *         '400':
+ *           description: Bad Request
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   status:
+ *                     type: string
+ *                     example: application error
+ *                   message:
+ *                     type: string
+ *                     example: Invalid input data
+ *         '500':
+ *           description: Internal Server Error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   status:
+ *                     type: string
+ *                     example: error
+ *                   message:
+ *                     type: string
+ *                     example: An unexpected error occurred
  */
 userRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { ImageLinks } from './ImageLinks';
+import userService from '../service/user.service';
 
 const prisma = new PrismaClient();
 

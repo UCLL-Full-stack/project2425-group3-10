@@ -2,7 +2,7 @@ import { User } from '../domain/model/user';
 
 import { database } from '../util/db.server';
 import {Prisma} from '@prisma/client';
-
+import bcrypt = require("bcrypt");
 const getAllUsers = async (): Promise<User[]> => {
     try {
         const usersPrisma = await database.user.findMany();
@@ -29,7 +29,7 @@ const createUser = async (newUser: User): Promise<User> => {
     const user = await database.user.create({
         data: {
             email: newUser.getEmail(),
-            password: newUser.getPassword(),
+            password: await bcrypt.hash(newUser.getPassword(), 12),
             role: newUser.getRole()
         }
     });
