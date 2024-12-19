@@ -14,18 +14,27 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
     const [groups, setGroups] = useState<Array<Group>>([]);
     const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null); // State for success message
+    const [showCreateGroupForm, setShowCreateGroupForm] = useState<boolean>(false);
 
     const handleCreateGroup = (activity: Activity) => {
         setSelectedActivity(activity);
-        setError(null); // Reset error state when opening the form
+        setShowCreateGroupForm(true); // Show the create group form
+        fetchGroups(activity.id); // Fetch groups for the selected activity
     };
 
     const handleGroupSubmit = async (groupData: { name: string; maxPlayers: number; activityId: number }) => {
         try {
             setError(null);
-            const createdGroup = await GroupService.createGroup(groupData);
-            alert(`Group "${createdGroup.name}" created successfully!`);
-            setSelectedActivity(null); // Close the form after submission
+            setSuccessMessage(null);
+
+            await GroupService.createGroup(groupData);
+
+            // Refresh groups after adding a new group
+            fetchGroups(groupData.activityId);
+
+            setSuccessMessage(`Group "${groupData.name}" created successfully!`);
+            setShowCreateGroupForm(false); // Close the form after submission
         } catch (error) {
             console.error("Error creating group:", error);
             setError("Failed to create group. Please try again.");
@@ -48,6 +57,8 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
 
     const handleActivityClick = (activity: Activity) => {
         setSelectedActivity(activity);
+        setShowCreateGroupForm(false); // Ensure only groups are shown
+        setSuccessMessage(null); // Clear any previous success messages
         fetchGroups(activity.id); // Fetch groups for the selected activity
     };
 
@@ -68,15 +79,24 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
                         <tr
                             key={index}
                             className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-gray-100`}
-                            onClick={() => handleActivityClick(activity)}
                         >
-                            <td className="border border-gray-200 px-4 py-2 text-gray-700">{activity.name}</td>
+                            <td
+                                className="border border-gray-200 px-4 py-2 text-gray-700 cursor-pointer"
+                                onClick={() => handleActivityClick(activity)} // Show groups when clicking the name
+                            >
+                                {activity.name}
+                            </td>
                             <td className="border border-gray-200 px-4 py-2 text-gray-700">{activity.description}</td>
-                            <td className="border border-gray-200 px-4 py-2 text-gray-700">{activity.type}</td>
+                            <td
+                                className="border border-gray-200 px-4 py-2 text-gray-700 cursor-pointer"
+                                onClick={() => handleActivityClick(activity)} // Show groups when clicking the player count
+                            >
+                                {activity.type}
+                            </td>
                             <td className="border border-gray-200 px-4 py-2 text-gray-700">
                                 <button
                                     className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                                    onClick={() => handleCreateGroup(activity)}
+                                    onClick={() => handleCreateGroup(activity)} // Show groups and form
                                 >
                                     Create Group
                                 </button>
@@ -90,6 +110,9 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
             {selectedActivity && (
                 <div className="mt-4">
                     <h2 className="text-lg font-bold">Groups for {selectedActivity.name}</h2>
+                    {successMessage && (
+                        <p className="text-green-500 mb-4">{successMessage}</p> // Display success message
+                    )}
                     {loadingGroups ? (
                         <p>Loading groups...</p>
                     ) : error ? (
@@ -98,6 +121,15 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
                         <GroupTable groups={groups} /> // Render GroupTable if groups exist
                     ) : (
                         <p>No groups for this activity yet.</p> // Display message if no groups exist
+                    )}
+                    {showCreateGroupForm && (
+                        <div className="mt-4">
+                            <h2 className="text-lg font-bold">Create a New Group</h2>
+                            <CreateGroupForm
+                                onSubmit={handleGroupSubmit}
+                                activityId={selectedActivity.id}
+                            />
+                        </div>
                     )}
                 </div>
             )}
