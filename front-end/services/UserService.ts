@@ -28,7 +28,8 @@ const login = async(user: Login) =>{
     return response
 }
 
-const getAllUsers = async(token: string) =>{
+const getAllUsers = async() =>{
+    const token = sessionStorage.getItem('token')
     return fetch(process.env.NEXT_PUBLIC_API_URL +'/users',{
         method: 'get',
         headers: {

@@ -10,19 +10,10 @@ datasource db {
 model User {
   id       Int          @id @default(autoincrement())
   email    String       @unique
+  username String       @unique
   password String
   role     String
-  profile  Profile?
   groups   UserGroups[]
-}
-
-model Profile {
-  id       Int            @id @default(autoincrement())
-  username String
-  pfp      Bytes
-  userId   Int            @unique
-  user     User           @relation(fields: [userId], references: [id])
-  games    ProfileGames[]
 }
 
 model Group {
@@ -36,10 +27,9 @@ model Group {
 }
 
 model Game {
-  id         Int            @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   name       String
   genre      String
-  profiles   ProfileGames[]
   Activities Activity[]
   logo       Bytes
 }
@@ -60,13 +50,4 @@ model UserGroups {
   group   Group @relation(fields: [groupId], references: [id])
 
   @@id([userId, groupId])
-}
-
-model ProfileGames {
-  profileId Int
-  gameId    Int
-  profile   Profile @relation(fields: [profileId], references: [id])
-  game      Game    @relation(fields: [gameId], references: [id])
-
-  @@id([profileId, gameId])
 }

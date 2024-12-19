@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import LoginForm from '@/components/user/loginForm';
 import { User } from "@/types";
+import { router } from 'next/client';
 
 const Header: React.FC = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
 
     const toggleLoginForm = () => {
         setIsLoginOpen(!isLoginOpen);
@@ -23,11 +25,13 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         sessionStorage.removeItem("loggedInUser");
         setLoggedInUser(null);
+        router.push("/");
     };
 
     useEffect(() => {
         getLoggedInUser();
     }, []);
+
 
     return (
         <header className="bg-gray-800 text-white shadow-md">

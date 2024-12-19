@@ -1,7 +1,6 @@
 const getAllGames = async () => {
     const token = sessionStorage.getItem("token")
 
-    console.log(token)
 
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/games', {
         method: 'GET',
