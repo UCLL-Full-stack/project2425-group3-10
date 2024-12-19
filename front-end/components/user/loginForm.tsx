@@ -53,6 +53,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
             if (response.status === 200) {
                 setStatusMessage("Login successful");
                 onClose();
+                await router.push("/");
             } else {
                 setStatusMessage("Login failed");
             }

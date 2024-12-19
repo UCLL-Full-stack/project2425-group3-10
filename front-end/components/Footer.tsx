@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
     return (
-        <footer className="text-center py-8 bg-blue-700 text-blue-200">
+        <footer className="header">
             <p className="text-sm">
                 © {new Date().getFullYear()} PlayPal. Alle rechten voorbehouden.
             </p>

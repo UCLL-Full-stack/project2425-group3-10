@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LoginForm from '@/components/user/loginForm';
 import { User } from "@/types";
+import { router } from 'next/client';
 
 const Header: React.FC = () => {
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -24,6 +25,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         sessionStorage.removeItem("loggedInUser");
         setLoggedInUser(null);
+        router.push("/");
     };
 
     useEffect(() => {
@@ -38,9 +40,7 @@ const Header: React.FC = () => {
             </div>
             <nav className="navbar">
                 <a href="">Home</a>
-                <a href="games">Games</a>
-                <a href="community">Community</a>
-                <a href="about">About</a>
+                {loggedInUser && <a href="games">Games</a>}
                 {loggedInUser && loggedInUser?.role === "ADMIN" && <a href="userOverview">UserOverview</a>}
                 {loggedInUser && (loggedInUser?.role === "MODERATOR" || loggedInUser?.role === "ADMIN") && <a href="GameOverview">ActivityOverview</a>}
                 {!loggedInUser ? (
