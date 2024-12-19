@@ -19,6 +19,7 @@ export type Activity = {
 
 
 export type User = {
+    id: number;
     email: string;
     password: string;
     role: string
@@ -27,6 +28,11 @@ export type User = {
 export type Login = {
     email: string;
     password: string;
+}
+
+export type Profile = {
+    user: User;
+    username: string;
 }
 
 export type CardType = {

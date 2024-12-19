@@ -42,7 +42,7 @@ const Header: React.FC = () => {
                 <a href="games">Games</a>
                 <a href="community">Community</a>
                 <a href="about">About</a>
-                {loggedInUser && loggedInUser?.role === "ADMIN" && <a href="UserOverview">UserOverview</a>}
+                {loggedInUser && loggedInUser?.role === "ADMIN" && <a href="userOverview">UserOverview</a>}
                 {loggedInUser && (loggedInUser?.role === "MODERATOR" || loggedInUser?.role === "ADMIN") && <a href="GameOverview">ActivityOverview</a>}
                 {!loggedInUser ? (
                     <a href="#" onClick={toggleLoginForm}>

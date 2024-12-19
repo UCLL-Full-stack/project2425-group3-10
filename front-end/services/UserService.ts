@@ -28,6 +28,13 @@ const login = async(user: Login) =>{
     return response
 }
 
+const getAllUsers = async(token: string) =>{
+    return fetch(process.env.NEXT_PUBLIC_API_URL +'/users',{
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+})}
 
-
-export default { createUser, login }
+export default { createUser, login, getAllUsers }

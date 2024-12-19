@@ -40,8 +40,9 @@ const userRouter = express.Router()
  *
  */
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request,  res: Response, next: NextFunction) => {
     try {
+        console.log(req.header("Authorization"))
         const users: User[] = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error) {

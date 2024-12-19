@@ -9,7 +9,6 @@ const getAllUsers = async (): Promise<User[]> => {
         const usersPrisma = await database.user.findMany();
         return usersPrisma.map((userPrisma) => User.from(userPrisma));
     }catch (error){
-        console.log(error);
         throw new Error(`Error occurred while getting all users`);
     }
 }
@@ -73,4 +72,6 @@ const getUserByEmail = async (email: string): Promise<User> => {
 }
 
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, getUserByEmail }
+
+
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, getUserByEmail,  }
