@@ -1,10 +1,10 @@
 import express, {NextFunction, Request, Response} from "express";
 import gameService from '../service/game.service';
 import { Activity } from '../domain/model/activity';
+import activityService from '../service/activity.service';
 /*import activityService from '../service/activity.service';*/
 
 const activityRouter= express.Router()
-/*
 activityRouter.get('/:gameId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const gameId = parseInt(req.params.gameId);
@@ -15,6 +15,6 @@ activityRouter.get('/:gameId', async (req: Request, res: Response, next: NextFun
     } catch (error) {
         next(error);
     }
-});*/
+});
 
 export {activityRouter}

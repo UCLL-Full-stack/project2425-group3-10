@@ -15,9 +15,6 @@ export type Activity = {
     type: string;
 }
 
-
-
-
 export type User = {
     email: string;
     password: string;
@@ -35,3 +32,10 @@ export type CardType = {
     imgUrl: string;
     // color: string;
 };
+
+export type Group = {
+    id: number
+    name: string;
+    maxPlayers: number
+    currentPlayers: number
+}

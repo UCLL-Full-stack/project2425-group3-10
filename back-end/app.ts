@@ -9,21 +9,22 @@ import {gameRouter} from "./controller/game.routes";
 import { activityRouter } from './controller/activity.routes';
 import helmet from 'helmet';
 import { expressjwt } from 'express-jwt';
+import { groupRouter } from './controller/group.routes';
 
 const app = express();
 dotenv.config();
-app.use(
+/*app.use(
     expressjwt({
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256']
     }).unless({
         path: [
-            /^\/api-docs\.*/,
+            /^\/api-docs\.*!/,
             "/users/login",
-            "/users/signup",
+            "/users/create",
         ]
     })
-)
+)*/
 app.use(cors());
 app.use(helmet());
 const port = process.env.APP_PORT || 3000;
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use('/users', userRouter);
 app.use('/games', gameRouter);
 app.use('/activities',activityRouter)
+app.use('/groups',groupRouter)
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
