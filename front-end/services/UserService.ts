@@ -28,4 +28,6 @@ const login = async(user: Login) =>{
     return response
 }
 
+
+
 export default { createUser, login }

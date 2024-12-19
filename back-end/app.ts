@@ -8,9 +8,22 @@ import {userRouter} from "./controller/user.routes";
 import {gameRouter} from "./controller/game.routes";
 import { activityRouter } from './controller/activity.routes';
 import helmet from 'helmet';
+import { expressjwt } from 'express-jwt';
 
 const app = express();
 dotenv.config();
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256']
+    }).unless({
+        path: [
+            /^\/api-docs\.*/,
+            "/users/login",
+            "/users/signup",
+        ]
+    })
+)
 app.use(cors());
 app.use(helmet());
 const port = process.env.APP_PORT || 3000;
