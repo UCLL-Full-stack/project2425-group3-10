@@ -6,8 +6,8 @@ const getAllActivities = async(): Promise <Activity[]> =>{
     return activityDb.getAllActivities()
 }*/
 
-const getActivityByGame = async (gameId: number): Promise<Activity[]> => {
+/*const getActivityByGame = async (gameId: number): Promise<Activity[]> => {
     return await activityDb.getActivitiesByGameId(gameId)
-}
-
-export default {getActivityByGame}
+}*/
+/*
+export default {getActivityByGame}*/

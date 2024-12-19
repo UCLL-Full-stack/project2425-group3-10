@@ -1,13 +1,19 @@
-type Role = 'admin' | 'user';
-type Genre = 'FPS' | 'RPG' | 'MMO' | 'INDIE'
-type TypeOfActivity = 'PVP'|'PVE'| 'C-OOP'
+export type Role = 'admin' | 'user';
+export type Genre = 'FPS' | 'RPG' | 'MMO' | 'INDIE'
+export type TypeOfActivity = 'PVP'|'PVE'| 'C-OOP'
 
-type Activity = {
+export type UserInput = {
+    id?: number;
+    password?: string
+    email?: string
+    role? : string
+}
+
+export type Activity = {
     name: string;
     id: number;
     type: string;
     gameId: number | null; // Ensure this property exists
 };
 
-export { Role, Genre, TypeOfActivity, Activity };
 

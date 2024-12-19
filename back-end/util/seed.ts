@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { ImageLinks } from './ImageLinks';
+import bcrypt = require('bcrypt');
 import userService from '../service/user.service';
 
 const prisma = new PrismaClient();
@@ -13,9 +14,9 @@ async function main() {
 
     // Create users
     const users = [
-        { email: 'user1@example.com', password: 'password1', role: 'USER' },
-        { email: 'user2@example.com', password: 'password2', role: 'ADMIN' },
-        { email: 'user3@example.com', password: 'password3', role: 'USER' },
+        { email: 'user1@example.com', password: await bcrypt.hash("password1", 12), role: 'USER' },
+        { email: 'user2@example.com', password: await bcrypt.hash("password2", 12), role: 'ADMIN' },
+        { email: 'user3@example.com', password: await bcrypt.hash("password3", 12), role: 'USER' },
     ];
 
     for (const user of users) {

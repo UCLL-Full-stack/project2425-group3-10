@@ -1,6 +1,8 @@
 import express, {NextFunction, Request, Response} from "express";
 import userService from "../service/user.service";
 import {User} from "../domain/model/user";
+import { UserInput } from '../types';
+import UserService from '../service/user.service';
 
 /**
  * @swagger
@@ -213,6 +215,21 @@ userRouter.delete('delete/:userId', async (req: Request, res: Response, next: Ne
         res.status(200).json(user);
     } catch (error) {
         next(error);
+    }
+})
+
+userRouter.post("/login", async (req: Request, res: Response) => {
+    try {
+        const userInput = <UserInput>req.body
+        const token = await UserService.authenicate(userInput)
+        if (userInput.email === undefined) {
+            throw new Error("Email")
+        }
+        const user = await userService.getUserByEmail(userInput.email)
+        res.status(200).json({ token, user })
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        res.status(401).json({status: "Unauthorized", errorMessage: errorMessage})
     }
 })
 

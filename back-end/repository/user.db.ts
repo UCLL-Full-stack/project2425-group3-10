@@ -3,6 +3,7 @@ import { User } from '../domain/model/user';
 import { database } from '../util/db.server';
 import {Prisma} from '@prisma/client';
 import bcrypt = require("bcrypt");
+
 const getAllUsers = async (): Promise<User[]> => {
     try {
         const usersPrisma = await database.user.findMany();
@@ -43,7 +44,7 @@ const updateUser = async (updatedUser: User): Promise<User> => {
         },
         data: {
             email: updatedUser.getEmail(),
-            password: updatedUser.getPassword(),
+            password: await bcrypt.hash(updatedUser.getPassword(), 12),
             role: updatedUser.getRole()
         }
     });
@@ -59,5 +60,17 @@ const deleteUser = async (userId: number): Promise<User> => {
     return User.from(user);
 }
 
+const getUserByEmail = async (email: string): Promise<User> => {
+    const user = await database.user.findUnique({
+        where: {
+            email: email
+        }
+    })
+    if(!user){
+        throw new Error(`User with email ${email} not found`);
+    }
+    return User.from(user);
+}
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser }
+
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser, getUserByEmail }

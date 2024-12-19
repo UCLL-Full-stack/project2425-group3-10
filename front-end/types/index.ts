@@ -24,6 +24,11 @@ export type User = {
     role: string
 }
 
+export type Login = {
+    email: string;
+    password: string;
+}
+
 export type CardType = {
     title: string;
     genre: string;

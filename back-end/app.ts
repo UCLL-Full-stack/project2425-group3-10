@@ -7,12 +7,14 @@ import swaggerUi from 'swagger-ui-express';
 import {userRouter} from "./controller/user.routes";
 import {gameRouter} from "./controller/game.routes";
 import { activityRouter } from './controller/activity.routes';
+import helmet from 'helmet';
 
 const app = express();
 dotenv.config();
+app.use(cors());
+app.use(helmet());
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors());
 app.use(bodyParser.json());
 app.use('/users', userRouter);
 app.use('/games', gameRouter);
@@ -44,8 +46,11 @@ app.listen(port || 3000, () => {
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(400).json({
-        status: "application error",
-        message: err.message,
-    });
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ message: 'Unauthorized' });
+    }else if (err.name === 'Error') {
+        res.status(400).json({ status: 'error',message: err.message });
+    }else {
+        next()
+    }
 });
