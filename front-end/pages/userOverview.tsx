@@ -1,23 +1,23 @@
 import Header from '@/components/Header';
 import useSWR, { mutate } from 'swr';
-import { Profile } from '@/types';
 import UserOverviewTable from '@/components/user/userOverviewTable';
-import profileService from '@/services/profileService';
 import useInterval from '@use-it/interval';
+import { User } from '@/types';
+import UserService from '@/services/UserService';
 
 const UserOverview: React.FC = () => {
-    const getProfiles = async (): Promise<Profile[]> => {
-        const response = await profileService.getAllProfiles();
+    const getUsers = async (): Promise<User[]> => {
+        const response = await UserService.getAllUsers();
         if (!response.ok) {
             throw new Error('Failed to fetch profiles');
         }
         return response.json();
     };
 
-    const { data: profiles, error } = useSWR<Profile[]>('profiles', getProfiles);
+    const { data: users, error } = useSWR<User[]>('profiles', getUsers);
 
     useInterval(() => {
-        mutate('profiles', getProfiles());
+        mutate('users', getUsers());
     }, 30000);
 
     return (
@@ -29,8 +29,8 @@ const UserOverview: React.FC = () => {
                 </p>
             )}
             <div className="max-w-300 p-10">
-                {profiles ? (
-                    <UserOverviewTable profiles={profiles} />
+                {users ? (
+                    <UserOverviewTable users={users} />
                 ) : (
                     <p>Loading...</p>
                 )}

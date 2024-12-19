@@ -42,7 +42,6 @@ const userRouter = express.Router()
 
 userRouter.get('/', async (req: Request,  res: Response, next: NextFunction) => {
     try {
-        console.log(req.header("Authorization"))
         const users: User[] = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error) {
@@ -163,7 +162,7 @@ userRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
             email: req.body.email,
             password: req.body.password,
             role: req.body.role,
-
+            username: req.body.username
         })
         const user: User = await userService.createUser(newUser);
         res.status(200).json(user);
@@ -222,7 +221,7 @@ userRouter.delete('delete/:userId', async (req: Request, res: Response, next: Ne
 userRouter.post("/login", async (req: Request, res: Response) => {
     try {
         const userInput = <UserInput>req.body
-        const token = await UserService.authenicate(userInput)
+        const token = await UserService.authenticate(userInput)
         if (userInput.email === undefined) {
             throw new Error("Email")
         }

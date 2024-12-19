@@ -30,7 +30,8 @@ const createUser = async (newUser: User): Promise<User> => {
         data: {
             email: newUser.getEmail(),
             password: await bcrypt.hash(newUser.getPassword(), 12),
-            role: newUser.getRole()
+            role: newUser.getRole(),
+            username: newUser.getUsername()
         }
     });
     return User.from(user);

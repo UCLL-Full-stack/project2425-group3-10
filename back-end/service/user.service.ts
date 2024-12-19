@@ -32,7 +32,7 @@ const getUserByEmail = async (email: string): Promise<User> => {
     return userDb.getUserByEmail(email)
 }
 
-const authenicate = async ({email, password}:UserInput): Promise<string> => {
+const authenticate = async ({email, password}:UserInput): Promise<string> => {
     if (!email || !password) {
         throw new Error("Email and or password are required");
     }
@@ -50,6 +50,6 @@ export default {
     createUser,
     updateUser,
     deleteUser,
-    authenicate,
+    authenticate,
     getUserByEmail
 }

@@ -8,15 +8,14 @@ async function main() {
     // Clear existing data
     await prisma.activity.deleteMany();
     await prisma.game.deleteMany();
-    await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
     await prisma.group.deleteMany();
 
     // Create users
     const users = [
-        { email: 'user1@example.com', password: await bcrypt.hash("password1", 12), role: 'USER' },
-        { email: 'user2@example.com', password: await bcrypt.hash("password2", 12), role: 'ADMIN' },
-        { email: 'user3@example.com', password: await bcrypt.hash("password3", 12), role: 'USER' },
+        { email: 'user1@example.com',username:"SuperDope", password: await bcrypt.hash("password1", 12), role: 'USER' },
+        { email: 'user2@example.com', username: "NietZoDope",password: await bcrypt.hash("password2", 12), role: 'ADMIN' },
+        { email: 'user3@example.com', username: "HelemaalNietDope",password: await bcrypt.hash("password3", 12), role: 'USER' },
     ];
 
     const createdUsers = [];
@@ -79,31 +78,10 @@ async function main() {
 
     console.log('Activities have been added to games');
 
-    // Create profiles for users
-    const profiles = [
-        { username: 'PlayerOne', pfp: Buffer.from(''), userId: createdUsers[0].id, games: [createdGames[0], createdGames[1]] },
-        { username: 'AdminUser', pfp: Buffer.from(''), userId: createdUsers[1].id, games: [createdGames[1], createdGames[2]] },
-        { username: 'CasualGamer', pfp: Buffer.from(''), userId: createdUsers[2].id, games: [createdGames[0], createdGames[2]] },
-    ];
 
-    for (const profile of profiles) {
-        const profileGames = profile.games.map(game => ({
-            game: { connect: { id: game.id } }
-        }));
 
-        await prisma.profile.create({
-            data: {
-                username: profile.username,
-                pfp: profile.pfp,
-                user: { connect: { id: profile.userId } },
-                games: {
-                    create: profileGames,
-                },
-            },
-        });
-    }
 
-    console.log('Profiles have been added for users');
+
 }
 
 main()

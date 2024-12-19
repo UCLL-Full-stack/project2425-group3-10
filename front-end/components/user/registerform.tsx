@@ -5,6 +5,7 @@ const RegisterForm: React.FC = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        username: '',
         role: 'User'
     });
 
@@ -48,6 +49,16 @@ const RegisterForm: React.FC = () => {
                     name="email"  // Corrected 'name' attribute
                     id="email"    // Corrected 'id' attribute
                     value={formData.email}
+                    onChange={handleChange}
+                    className="w-3/5 border rounded-lg h-9 mb-3 px-2 focus:outline-none focus:border-cyan-600"
+                />
+
+                <label htmlFor="username" className="text-left w-3/5">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    value={formData.username}
                     onChange={handleChange}
                     className="w-3/5 border rounded-lg h-9 mb-3 px-2 focus:outline-none focus:border-cyan-600"
                 />
