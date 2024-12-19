@@ -1,12 +1,15 @@
-import {Game} from '@/types';
+const getAllGames = async () => {
+    const token = sessionStorage.getItem("token")
 
-const getAllGames = async() =>{
-    return fetch(process.env.NEXT_PUBLIC_API_URL + '/games',{
+    console.log(token)
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/games', {
         method: 'GET',
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Correct Bearer spelling and interpolation
         }
-    })
-}
+    });
+};
 
-export default {getAllGames}
+export default { getAllGames };
