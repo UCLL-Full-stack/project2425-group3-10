@@ -10,6 +10,7 @@ import { activityRouter } from './controller/activity.routes';
 import helmet from 'helmet';
 import { expressjwt } from 'express-jwt';
 import { groupRouter } from './controller/group.routes';
+import { profileRouter } from './controller/profile.routes';
 
 const app = express();
 dotenv.config();
@@ -34,6 +35,7 @@ app.use('/users', userRouter);
 app.use('/games', gameRouter);
 app.use('/activities',activityRouter)
 app.use('/groups',groupRouter)
+app.use('/profiles', profileRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { ImageLinks } from './ImageLinks';
 import bcrypt = require('bcrypt');
-import userService from '../service/user.service';
 
 const prisma = new PrismaClient();
 
@@ -9,6 +8,7 @@ async function main() {
     // Clear existing data
     await prisma.activity.deleteMany();
     await prisma.game.deleteMany();
+    await prisma.profile.deleteMany();
     await prisma.user.deleteMany();
     await prisma.group.deleteMany();
 
@@ -19,10 +19,12 @@ async function main() {
         { email: 'user3@example.com', password: await bcrypt.hash("password3", 12), role: 'USER' },
     ];
 
+    const createdUsers = [];
     for (const user of users) {
-        await prisma.user.create({
+        const createdUser = await prisma.user.create({
             data: user,
         });
+        createdUsers.push(createdUser);
     }
 
     // Create games
@@ -75,8 +77,33 @@ async function main() {
         }
     }
 
-
     console.log('Activities have been added to games');
+
+    // Create profiles for users
+    const profiles = [
+        { username: 'PlayerOne', pfp: Buffer.from(''), userId: createdUsers[0].id, games: [createdGames[0], createdGames[1]] },
+        { username: 'AdminUser', pfp: Buffer.from(''), userId: createdUsers[1].id, games: [createdGames[1], createdGames[2]] },
+        { username: 'CasualGamer', pfp: Buffer.from(''), userId: createdUsers[2].id, games: [createdGames[0], createdGames[2]] },
+    ];
+
+    for (const profile of profiles) {
+        const profileGames = profile.games.map(game => ({
+            game: { connect: { id: game.id } }
+        }));
+
+        await prisma.profile.create({
+            data: {
+                username: profile.username,
+                pfp: profile.pfp,
+                user: { connect: { id: profile.userId } },
+                games: {
+                    create: profileGames,
+                },
+            },
+        });
+    }
+
+    console.log('Profiles have been added for users');
 }
 
 main()
