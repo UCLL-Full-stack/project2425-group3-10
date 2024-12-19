@@ -1,7 +1,6 @@
 import { User } from '../domain/model/user';
 
 import { database } from '../util/db.server';
-import {Prisma} from '@prisma/client';
 import bcrypt = require("bcrypt");
 
 const getAllUsers = async (): Promise<User[]> => {
@@ -38,18 +37,29 @@ const createUser = async (newUser: User): Promise<User> => {
 }
 
 const updateUser = async (updatedUser: User): Promise<User> => {
-    const user = await database.user.update({
-        where: {
-            id: updatedUser.getId()
-        },
-        data: {
-            email: updatedUser.getEmail(),
-            password: await bcrypt.hash(updatedUser.getPassword(), 12),
-            role: updatedUser.getRole()
-        }
-    });
-    return User.from(user);
-}
+    if (!(updatedUser instanceof User)) {
+        updatedUser = new User(updatedUser);
+    }
+    try {
+        const user = await database.user.update({
+            where: {
+                id: updatedUser.getId(),
+            },
+            data: {
+                email: updatedUser.getEmail(),
+                password: await bcrypt.hash(updatedUser.getPassword(), 12),
+                role: updatedUser.getRole(),
+                username: updatedUser.getUsername(),
+            },
+        });
+
+        return User.from(user);
+    } catch (error) {
+        console.error("Error during updateUser:", error);
+        throw error;
+    }
+};
+
 
 const deleteUser = async (userId: number): Promise<User> => {
     const user = await database.user.delete({

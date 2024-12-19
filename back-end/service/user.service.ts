@@ -9,11 +9,11 @@ import { UserInput } from '../types';
 
 
 const getAllUsers = async (): Promise<User[]>=>{
-    return userDb.getAllUsers()
+    return await userDb.getAllUsers()
 };
 
 const getUserById= async (userId: number): Promise<User> =>{
-    return userDb.getUserById(userId)
+    return await userDb.getUserById(userId)
 }
 
 const createUser = async (newUser: User): Promise<User> => {
@@ -21,11 +21,11 @@ const createUser = async (newUser: User): Promise<User> => {
 };
 
 const updateUser = async (updatedUser: User): Promise<User> => {
-    return userDb.updateUser(updatedUser)
+    return await userDb.updateUser(updatedUser)
 }
 
 const deleteUser = async (userId: number): Promise<User> => {
-    return userDb.deleteUser(userId)
+    return await userDb.deleteUser(userId)
 }
 
 const getUserByEmail = async (email: string): Promise<User> => {

@@ -44,16 +44,12 @@ const Header: React.FC = () => {
                     <a href="" className="hover:text-indigo-400 transition duration-200">
                         Home
                     </a>
-                    <a href="games" className="hover:text-indigo-400 transition duration-200">
-                        Games
-                    </a>
-                    <a href="community" className="hover:text-indigo-400 transition duration-200">
-                        Community
-                    </a>
-                    <a href="about" className="hover:text-indigo-400 transition duration-200">
-                        About
-                    </a>
-                    {loggedInUser && loggedInUser?.role === "ADMIN" && (
+                    {loggedInUser && (
+                        <a href="games" className="hover:text-indigo-400 transition duration-200">
+                            Games
+                        </a>
+                    )}
+                    {loggedInUser && loggedInUser?.role === 'ADMIN' && (
                         <a href="userOverview" className="hover:text-indigo-400 transition duration-200">
                             User Overview
                         </a>

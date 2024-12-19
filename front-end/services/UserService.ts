@@ -38,4 +38,39 @@ const getAllUsers = async() =>{
         }
 })}
 
-export default { createUser, login, getAllUsers }
+const getUser = async(userId: string) =>{
+    const token = sessionStorage.getItem('token')
+    return fetch(process.env.NEXT_PUBLIC_API_URL +'/users/'+userId,{
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+})
+}
+
+const updateUser = async(user: User) =>{
+    const token = sessionStorage.getItem('token')
+    return fetch(process.env.NEXT_PUBLIC_API_URL +'/users/update',{
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+})
+}
+
+const deleteUser = async(userId: string) =>{
+    console.log(process.env.NEXT_PUBLIC_API_URL +'/users/delete/'+userId)
+    const token = sessionStorage.getItem('token')
+    return fetch(process.env.NEXT_PUBLIC_API_URL +'/users/delete/'+userId,{
+        method: 'delete',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+})
+}
+
+export default { createUser, login, getAllUsers, getUser, updateUser, deleteUser };

@@ -25,8 +25,14 @@ const UserOverviewTable: React.FC<Props> = ({users}: Props) => {
                             <td className="border border-gray-300 px-4 py-2">{user.username}</td>
                             <td className="border border-gray-300 px-4 py-2">{user.email}</td>
                             <td className="border border-gray-300 px-4 py-2">{user.role}</td>
-                            <td className="border border-gray-300 px-4 py-2">
-                                <a href={`${user.id}`} className="text-blue-500 hover:text-blue-800">Edit</a>
+                            <td className="border border-gray-300 px-4 py-2 flex items-center">
+                                <a href={`user/${user.id}`} className="text-blue-500 hover:text-blue-800">
+                                    <img
+                                        src="../../images/edit.png"
+                                        alt="Edit"
+                                        className="w-4 h-4 mr-2"
+                                    />
+                                </a>
                             </td>
 
                         </tr>
