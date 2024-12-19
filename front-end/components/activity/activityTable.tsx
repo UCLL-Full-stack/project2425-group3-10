@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Activity } from "@/types";
 import { Group } from "@/types";
 import CreateGroupForm from "@/components/group/createGroupForm";
@@ -14,126 +14,119 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
     const [groups, setGroups] = useState<Array<Group>>([]);
     const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null); // State for success message
     const [showCreateGroupForm, setShowCreateGroupForm] = useState<boolean>(false);
 
-    const handleCreateGroup = (activity: Activity) => {
-        setSelectedActivity(activity);
-        setShowCreateGroupForm(true); // Show the create group form
-        fetchGroups(activity.id); // Fetch groups for the selected activity
-    };
-
-    const handleGroupSubmit = async (groupData: { name: string; maxPlayers: number; activityId: number }) => {
-        try {
-            setError(null);
-            setSuccessMessage(null);
-
-            await GroupService.createGroup(groupData);
-
-            // Refresh groups after adding a new group
-            fetchGroups(groupData.activityId);
-
-            setSuccessMessage(`Group "${groupData.name}" created successfully!`);
-            setShowCreateGroupForm(false); // Close the form after submission
-        } catch (error) {
-            console.error("Error creating group:", error);
-            setError("Failed to create group. Please try again.");
+    const handleActivityClick = async (activity: Activity) => {
+        if (selectedActivity?.id === activity.id) {
+            setSelectedActivity(null); // Collapse the groups table
+            return;
         }
-    };
 
-    const fetchGroups = async (activityId: number) => {
+        setSelectedActivity(activity);
+        setShowCreateGroupForm(false);
+
         try {
             setLoadingGroups(true);
-            setError(null);
-            const fetchedGroups = await GroupService.getGroupsFromActivity(activityId);
+            const fetchedGroups = await GroupService.getGroupsFromActivity(activity.id);
             setGroups(fetchedGroups);
         } catch (error) {
-            console.error("Error fetching groups:", error);
             setError("Failed to load groups. Please try again.");
         } finally {
             setLoadingGroups(false);
         }
     };
 
-    const handleActivityClick = (activity: Activity) => {
+    const handleCreateGroup = (activity: Activity) => {
         setSelectedActivity(activity);
-        setShowCreateGroupForm(false); // Ensure only groups are shown
-        setSuccessMessage(null); // Clear any previous success messages
-        fetchGroups(activity.id); // Fetch groups for the selected activity
+        setShowCreateGroupForm(true);
+    };
+
+    const closeCreateGroupModal = () => {
+        setShowCreateGroupForm(false); // Close the modal
     };
 
     return (
-        <>
-            <div className="overflow-x-auto">
-                <table className="table-auto w-full border-collapse border border-gray-200">
-                    <thead className="bg-gray-100">
+        <div className="p-6 bg-gray-900 text-white rounded-lg shadow-md">
+            <div className="max-w-4xl mx-auto overflow-x-auto">
+                <table className="table-auto w-full border-collapse">
+                    <thead className="bg-indigo-600">
                     <tr>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-gray-600 font-medium">Name</th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-gray-600 font-medium">Description</th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-gray-600 font-medium">Type</th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-gray-600 font-medium">Actions</th>
+                        <th className="px-4 py-3 text-left text-white font-bold">Name</th>
+                        <th className="px-4 py-3 text-left text-white font-bold">Description</th>
+                        <th className="px-4 py-3 text-left text-white font-bold">Type</th>
+                        <th className="px-4 py-3 text-left text-white font-bold">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {activities.map((activity, index) => (
-                        <tr
-                            key={index}
-                            className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-gray-100`}
-                        >
-                            <td
-                                className="border border-gray-200 px-4 py-2 text-gray-700 cursor-pointer"
-                                onClick={() => handleActivityClick(activity)} // Show groups when clicking the name
+                        <React.Fragment key={activity.id}>
+                            {/* Activity Row */}
+                            <tr
+                                className={`${
+                                    index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                                } hover:bg-indigo-500`}
+                                onClick={() => handleActivityClick(activity)}
                             >
-                                {activity.name}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-gray-700">{activity.description}</td>
-                            <td
-                                className="border border-gray-200 px-4 py-2 text-gray-700 cursor-pointer"
-                                onClick={() => handleActivityClick(activity)} // Show groups when clicking the player count
-                            >
-                                {activity.type}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-gray-700">
-                                <button
-                                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                                    onClick={() => handleCreateGroup(activity)} // Show groups and form
-                                >
-                                    Create Group
-                                </button>
-                            </td>
-                        </tr>
+                                <td className="px-4 py-3 text-white cursor-pointer">{activity.name}</td>
+                                <td className="px-4 py-3 text-white">{activity.description}</td>
+                                <td className="px-4 py-3 text-white">{activity.type}</td>
+                                <td className="px-4 py-3">
+                                    <button
+                                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent row click from collapsing the table
+                                            handleCreateGroup(activity);
+                                        }}
+                                    >
+                                        Create Group
+                                    </button>
+                                </td>
+                            </tr>
+
+                            {/* Groups Table Row */}
+                            {selectedActivity?.id === activity.id && (
+                                <tr>
+                                    <td colSpan={4} className="p-4 bg-gray-800">
+                                        {loadingGroups ? (
+                                            <p className="text-gray-400">Loading groups...</p>
+                                        ) : error ? (
+                                            <p className="text-red-500">{error}</p>
+                                        ) : groups.length > 0 ? (
+                                            <GroupTable groups={groups} />
+                                        ) : (
+                                            <p className="text-gray-400 text-center">
+                                                No groups found for this activity.
+                                            </p>
+                                        )}
+
+                                        {showCreateGroupForm && (
+                                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                                <div className="relative bg-gray-800 text-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                                                    <button
+                                                        onClick={closeCreateGroupModal}
+                                                        className="absolute top-2 right-2 text-gray-300 hover:text-white text-xl"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                    <CreateGroupForm
+                                                        onSubmit={(groupData) => {
+                                                            console.log("Group Created:", groupData);
+                                                            closeCreateGroupModal(); // Close modal after submission
+                                                        }}
+                                                        activityId={activity.id}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </td>
+                                </tr>
+                            )}
+                        </React.Fragment>
                     ))}
                     </tbody>
                 </table>
             </div>
-
-            {selectedActivity && (
-                <div className="mt-4">
-                    <h2 className="text-lg font-bold">Groups for {selectedActivity.name}</h2>
-                    {successMessage && (
-                        <p className="text-green-500 mb-4">{successMessage}</p> // Display success message
-                    )}
-                    {loadingGroups ? (
-                        <p>Loading groups...</p>
-                    ) : error ? (
-                        <p className="text-red-500">{error}</p>
-                    ) : groups.length > 0 ? (
-                        <GroupTable groups={groups} /> // Render GroupTable if groups exist
-                    ) : (
-                        <p>No groups for this activity yet.</p> // Display message if no groups exist
-                    )}
-                    {showCreateGroupForm && (
-                        <div className="mt-4">
-                            <h2 className="text-lg font-bold">Create a New Group</h2>
-                            <CreateGroupForm
-                                onSubmit={handleGroupSubmit}
-                                activityId={selectedActivity.id}
-                            />
-                        </div>
-                    )}
-                </div>
-            )}
-        </>
+        </div>
     );
 };
 

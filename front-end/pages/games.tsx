@@ -1,9 +1,10 @@
 import Header from '@/components/Header';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Game} from '@/types';
 import gameService from '@/services/GameService';
 import GameCard from '@/components/game/GameCard';
 import GameOverview from '@/components/game/GameOverview';
+import Footer from "@/components/Footer";
 
 const Games: React.FC = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -42,6 +43,7 @@ const Games: React.FC = () => {
             <div className="max-w-150">
                 <GameOverview games={games} onGameClick={handleSelectedGame}/>
             </div>
+            <Footer/>
         </>
     );
 };
