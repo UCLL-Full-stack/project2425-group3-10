@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useTranslation } from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export default function Home() {
     const { t } = useTranslation();
@@ -43,3 +44,12 @@ export default function Home() {
         </>
     );
 }
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+};
