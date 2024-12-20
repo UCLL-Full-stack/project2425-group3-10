@@ -50,8 +50,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
             const response = await UserService.login(user);
             if (response.status === 200) {
                 setStatusMessage("Login successful");
-                onClose();
                 await router.push("/");
+                onClose();
             } else {
                 setStatusMessage("Login failed");
             }

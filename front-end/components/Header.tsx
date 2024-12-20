@@ -23,7 +23,8 @@ const Header: React.FC = () => {
     };
 
     const handleLogout = () => {
-        sessionStorage.removeItem("loggedInUser");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("token");
         setLoggedInUser(null);
         router.push("/");
     };
