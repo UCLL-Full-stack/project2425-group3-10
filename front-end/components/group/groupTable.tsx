@@ -1,11 +1,25 @@
-import { Group } from "@/types";
-import GroupService from "@/services/GroupService"; // Import the GroupService
+import { Group, User } from '@/types';
+import GroupService from "@/services/GroupService";
+import React, { useEffect, useState } from 'react';
 
 type Props = {
     groups: Array<Group>;
 };
 
 const GroupTable: React.FC<Props> = ({ groups }) => {
+
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+    const getLoggedInUser = () => {
+        const storedUser = sessionStorage.getItem("user");
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            if (user) {
+                return user;
+            }
+        }
+        return null;
+    }
     const handleAddUserToGroup = async (groupId: number) => {
         try {
             const user = sessionStorage.getItem("user");
@@ -17,6 +31,21 @@ const GroupTable: React.FC<Props> = ({ groups }) => {
             alert("Failed to add user.");
         }
     };
+
+    const handleDeleteGroup = async (groupId: number) => {
+        try {
+            await GroupService.deleteGroup(groupId);
+        } catch (error) {
+            console.error("Failed to delete group:", error);
+        }
+    }
+
+    useEffect(() => {
+        const user = getLoggedInUser();
+        if (user) {
+            setLoggedInUser(user);
+        }
+    }, []);
 
     return (
         <div className="overflow-x-auto">
@@ -45,6 +74,14 @@ const GroupTable: React.FC<Props> = ({ groups }) => {
                             >
                                 Join Group
                             </button>
+                            {loggedInUser && (loggedInUser?.role === 'ADMIN' || loggedInUser.role=== 'MODERATOR') && (
+                                <button
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-2"
+                                    onClick={() => handleDeleteGroup(group.id)}
+                                >
+                                    Delete Group
+                                </button>
+                            )}
                         </td>
                     </tr>
                 ))}

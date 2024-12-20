@@ -208,9 +208,8 @@ userRouter.put('/update', async (req: Request, res: Response, next: NextFunction
  *         description: User ID
  *     responses:
  */
-userRouter.delete('delete/:userId', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.delete('/delete/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.params.userId)
         const userId = parseInt(req.params.userId);
         const user: User = await userService.deleteUser(userId);
         res.status(200).json(user);

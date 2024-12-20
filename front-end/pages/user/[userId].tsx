@@ -3,8 +3,11 @@ import Header from '@/components/Header';
 import { useRouter } from 'next/router';
 import UserService from '@/services/UserService';
 import { User } from '@/types';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const User: React.FC = () => {
+    const { t } = useTranslation();
     const router = useRouter();
     const { userId } = router.query;
 
@@ -24,7 +27,7 @@ const User: React.FC = () => {
             setFormData(user);
         } catch (error) {
             console.error(error);
-            setMessage('Failed to load user data');
+            setMessage(t('failed_to_load_user_data'));
         }
     };
 
@@ -44,12 +47,12 @@ const User: React.FC = () => {
                 if (!response.ok) {
                     throw new Error('Failed to update user');
                 }
-                setMessage('User updated successfully!');
+                setMessage(t('user_updated_successfully'));
                 router.push('/userOverview'); // Redirect after update
             }
         } catch (error) {
             console.error(error);
-            setMessage('Failed to update user');
+            setMessage(t('failed_to_update_user'));
         }
     };
 
@@ -59,11 +62,11 @@ const User: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Failed to delete user');
             }
-            setMessage('User deleted successfully!');
+            setMessage(t('user_deleted_successfully'));
             router.push('/userOverview'); // Redirect after deletion
         } catch (error) {
             console.error(error);
-            setMessage('Failed to delete user');
+            setMessage(t('failed_to_delete_user'));
         }
     };
 
@@ -77,12 +80,12 @@ const User: React.FC = () => {
         <>
             <Header />
             <div className="max-w-lg mx-auto mt-10 bg-gray-800 p-8 rounded-lg shadow-md text-white">
-                <h1 className="text-2xl font-bold mb-6 text-center">User Management</h1>
+                <h1 className="text-2xl font-bold mb-6 text-center">{t('user_management')}</h1>
                 {user && formData ? (
                     <form onSubmit={handleUpdate} className="space-y-4">
                         <h2 className="text-xl font-semibold mb-4">{user.username}</h2>
                         <div>
-                            <label htmlFor="id" className="block mb-2 text-sm">User ID</label>
+                            <label htmlFor="id" className="block mb-2 text-sm">{t('user_id')}</label>
                             <input
                                 type="text"
                                 id="id"
@@ -93,7 +96,7 @@ const User: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="username" className="block mb-2 text-sm">Username</label>
+                            <label htmlFor="username" className="block mb-2 text-sm">{t('username')}</label>
                             <input
                                 type="text"
                                 id="username"
@@ -104,7 +107,7 @@ const User: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="email" className="block mb-2 text-sm">Email</label>
+                            <label htmlFor="email" className="block mb-2 text-sm">{t('email')}</label>
                             <input
                                 type="email"
                                 id="email"
@@ -115,7 +118,7 @@ const User: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="role" className="block mb-2 text-sm">Role</label>
+                            <label htmlFor="role" className="block mb-2 text-sm">{t('role')}</label>
                             <select
                                 id="role"
                                 name="role"
@@ -123,9 +126,9 @@ const User: React.FC = () => {
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg"
                             >
-                                <option value="USER">USER</option>
-                                <option value="ADMIN">ADMIN</option>
-                                <option value="MODERATOR">MODERATOR</option>
+                                <option value="USER">{t('user_role')}</option>
+                                <option value="ADMIN">{t('admin_role')}</option>
+                                <option value="MODERATOR">{t('moderator_role')}</option>
                             </select>
                         </div>
                         <div className="flex space-x-4">
@@ -133,24 +136,34 @@ const User: React.FC = () => {
                                 type="submit"
                                 className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg w-full"
                             >
-                                Update
+                                {t('update')}
                             </button>
                             <button
                                 type="button"
                                 onClick={handleDelete}
                                 className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg w-full"
                             >
-                                Delete
+                                {t('delete')}
                             </button>
                         </div>
                     </form>
                 ) : (
-                    <p className="text-center">{message || 'Loading...'}</p>
-                )}
+                    <p className="text-center">{message || t('loading')}</p>
+                    )}
                 {message && <p className="mt-4 text-center text-yellow-400">{message}</p>}
             </div>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default User;

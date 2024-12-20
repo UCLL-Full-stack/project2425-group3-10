@@ -1,20 +1,36 @@
-import {Genre} from "../../types";
-import {Game as GamePrisma} from '@prisma/client';
+import { Genre } from "../../types";
+import { Game as GamePrisma } from '@prisma/client';
 
-export class Game{
-    readonly id?:number;
-    readonly name:string;
+export class Game {
+    readonly id?: number;
+    readonly name: string;
     readonly genre: Genre;
-    readonly logo! : string;
+    readonly logo!: string;
 
-    constructor(game:{id:number; name:string; genre:Genre; logo:Buffer|string}) {
+    constructor(game: { id?: number; name: string; genre: Genre; logo: Buffer | string }) {
         this.id = game.id;
-        this.genre = game.genre;
         this.name = game.name;
+        this.genre = game.genre;
         this.logo = game.logo instanceof Buffer ? game.logo.toString('base64') : game.logo;
+
+        this.validate();
     }
 
-    getId(): number|undefined {
+    private validate(): void {
+        this.validateName();
+    }
+
+    private validateName(): void {
+        if (!this.name || this.name.trim().length === 0) {
+            throw new Error('Game name cannot be empty.');
+        }
+    }
+
+
+
+
+
+    getId(): number | undefined {
         return this.id;
     }
 
@@ -30,15 +46,14 @@ export class Game{
         return this.logo;
     }
 
-
-
-    equal(game:Game):boolean{
+    equal(game: Game): boolean {
         return (
-            this.id === game.getId()&&
-                this.name === game.getName()
-        )
+            this.id === game.getId() &&
+            this.name === game.getName()
+        );
     }
-    static from({id, name, genre, logo}:GamePrisma){
-        return new Game({id, name, genre: genre as Genre, logo:Buffer.from(logo)})
+
+    static from({ id, name, genre, logo }: GamePrisma): Game {
+        return new Game({ id, name, genre: genre as Genre, logo: Buffer.from(logo) });
     }
 }

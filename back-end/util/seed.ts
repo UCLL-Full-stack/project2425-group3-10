@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Clear existing data
+    await prisma.group.deleteMany();
     await prisma.activity.deleteMany();
     await prisma.game.deleteMany();
     await prisma.user.deleteMany();
@@ -15,7 +16,8 @@ async function main() {
     const users = [
         { email: 'user1@example.com',username:"SuperDope", password: await bcrypt.hash("password1", 12), role: 'USER' },
         { email: 'user2@example.com', username: "NietZoDope",password: await bcrypt.hash("password2", 12), role: 'ADMIN' },
-        { email: 'user3@example.com', username: "HelemaalNietDope",password: await bcrypt.hash("password3", 12), role: 'USER' },
+        { email: 'user3@example.com', username: "HelemaalNietDope",password: await bcrypt.hash("password3", 12), role: 'MODERATOR' },
+        { email: 'test@user.be', username: "TestUser",password: await bcrypt.hash("password4", 12), role: 'USER' },
     ];
 
     const createdUsers = [];
@@ -30,7 +32,7 @@ async function main() {
     const games = [
         { name: 'Destiny 2', genre: 'FPS', logo: Buffer.from(ImageLinks.DESTINY2_BASE64_LOGO || '', 'base64') },
         { name: 'Valorant', genre: 'FPS', logo: Buffer.from(ImageLinks.VALORANT_BASE64_LOGO || '', 'base64') },
-        { name: 'Minecraft', genre: 'Sandbox', logo: Buffer.from(ImageLinks.BO6_BASE64_LOGO || '', 'base64') },
+        { name: 'BlackOps', genre: 'Sandbox', logo: Buffer.from(ImageLinks.BO6_BASE64_LOGO || '', 'base64') },
     ];
 
     const createdGames = [];

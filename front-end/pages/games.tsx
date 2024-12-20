@@ -5,6 +5,7 @@ import gameService from '@/services/GameService';
 import GameCard from '@/components/game/GameCard';
 import GameOverview from '@/components/game/GameOverview';
 import Footer from "@/components/Footer";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Games: React.FC = () => {
     const [games, setGames] = useState<Game[]>([]);
@@ -46,6 +47,17 @@ const Games: React.FC = () => {
             <Footer/>
         </>
     );
+};
+
+
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default Games;

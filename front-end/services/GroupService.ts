@@ -53,4 +53,38 @@ const createGroup = async (groupData: { name: string; maxPlayers: number; activi
     return response.json();
 };
 
-export default {getGroupsFromActivity, addUserToGroup, createGroup};
+const getAllGroups = async () => {
+    const token = sessionStorage.getItem('token');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch all groups. Status: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+const deleteGroup = async (groupId: number) => {
+    const token = sessionStorage.getItem('token');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups/${groupId}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to delete group ${groupId}. Status: ${response.status}`);
+    }
+}
+
+export default {getGroupsFromActivity, addUserToGroup, createGroup, deleteGroup, getAllGroups};

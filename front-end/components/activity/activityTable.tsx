@@ -36,6 +36,8 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
         }
     };
 
+
+
     const handleCreateGroup = (activity: Activity) => {
         setSelectedActivity(activity);
         setShowCreateGroupForm(true);
@@ -81,6 +83,7 @@ const ActivityTable: React.FC<Props> = ({ activities }) => {
                                         Create Group
                                     </button>
                                 </td>
+
                             </tr>
 
                             {/* Groups Table Row */}

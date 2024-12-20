@@ -4,6 +4,7 @@ import UserOverviewTable from '@/components/user/userOverviewTable';
 import useInterval from '@use-it/interval';
 import { User } from '@/types';
 import UserService from '@/services/UserService';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const UserOverview: React.FC = () => {
     const getUsers = async (): Promise<User[]> => {
@@ -37,6 +38,16 @@ const UserOverview: React.FC = () => {
             </div>
         </>
     );
+};
+
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default UserOverview;

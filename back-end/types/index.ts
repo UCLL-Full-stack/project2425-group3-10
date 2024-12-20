@@ -1,4 +1,4 @@
-export type Role = 'admin' | 'user' | 'administrator';
+export type Role = 'admin' | 'user' | 'moderator';
 export type Genre = 'FPS' | 'RPG' | 'MMO' | 'INDIE'
 export type TypeOfActivity = 'PVP'|'PVE'| 'C-OOP'
 

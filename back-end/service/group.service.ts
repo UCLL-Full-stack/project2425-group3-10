@@ -13,5 +13,14 @@ const createGroup = async (newGroup: Group): Promise<Group> => {
     return await groupDb.createGroup(newGroup);
 };
 
-export default { getGroupsByActivityId, addUserToGroup, createGroup };
+const getAllGroups = async (): Promise<Group[]> => {
+    return await groupDb.getAllGroups();
+}
+
+const deleteGroup = async (groupId: number): Promise<void> => {
+    return await groupDb.deleteGroup(groupId);
+}
+
+
+export default { getGroupsByActivityId, addUserToGroup, createGroup, deleteGroup, getAllGroups };
 

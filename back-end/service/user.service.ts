@@ -4,6 +4,7 @@ import jwt = require("jsonwebtoken");
 import jwtUtil from "../util/jwt";
 import bcrypt = require("bcrypt");
 import { UserInput } from '../types';
+import groupDb from '../repository/group.db';
 
 
 
@@ -25,6 +26,11 @@ const updateUser = async (updatedUser: User): Promise<User> => {
 }
 
 const deleteUser = async (userId: number): Promise<User> => {
+    const groups = await groupDb.getGroupsForUser(userId);
+    console.log(groups);
+    for (const group of groups) {
+        await groupDb.removeUserFromGroup(group, userId);
+    }
     return await userDb.deleteUser(userId)
 }
 

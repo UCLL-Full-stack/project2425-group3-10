@@ -13,6 +13,39 @@ export class Group {
         this.maxPlayers = group.maxPlayers;
         this.currentPlayers = group.currentPlayers;
         this.activityId = group.activityId;
+
+        this.validate();
+    }
+
+    private validate(): void {
+        this.validateName();
+        this.validateMaxPlayers();
+        this.validateCurrentPlayers();
+        this.validateActivityId();
+    }
+
+    private validateName(): void {
+        if (!this.name || this.name.trim().length === 0) {
+            throw new Error('Group name cannot be empty.');
+        }
+    }
+
+    private validateMaxPlayers(): void {
+        if (this.maxPlayers <= 0) {
+            throw new Error('Max players must be greater than 0.');
+        }
+    }
+
+    private validateCurrentPlayers(): void {
+        if (this.currentPlayers < 0 || this.currentPlayers > this.maxPlayers) {
+            throw new Error('Current players must be between 0 and max players.');
+        }
+    }
+
+    private validateActivityId(): void {
+        if (this.activityId <= 0) {
+            throw new Error('Activity ID must be a positive number.');
+        }
     }
 
     getId(): number | undefined {

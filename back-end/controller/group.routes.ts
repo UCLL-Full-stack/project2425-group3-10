@@ -54,5 +54,24 @@ groupRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
     }
 });
 
+groupRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const groups = await groupService.getAllGroups();
+        res.status(200).json(groups);
+    } catch (error) {
+        next(error);
+    }
+});
+
+groupRouter.delete('/:groupId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const groupId = parseInt(req.params.groupId);
+        await groupService.deleteGroup(groupId);
+        res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 export {groupRouter}
